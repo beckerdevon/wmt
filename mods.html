@@ -1,44 +1,1051 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Walmart Modular Planner</title>
-<meta name="theme-color" content="#0f172a" />
-<style>
-:root{--bg:#f5f7fb;--card:#ffffff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--blue:#2563eb;--green:#16a34a;--orange:#f97316;--red:#dc2626;--purple:#7c3aed;--shadow:0 10px 30px rgba(15,23,42,.08);--radius:20px}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef4ff 0,#f8fafc 220px);color:var(--ink);padding-bottom:40px}.app{max-width:1100px;margin:0 auto;padding:16px}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin:10px 0 14px}.title h1{font-size:28px;margin:0;letter-spacing:-.04em}.title p{color:var(--muted);margin:5px 0 0;font-size:14px}.pill{border:1px solid var(--line);background:rgba(255,255,255,.8);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:rgba(255,255,255,.92);border:1px solid rgba(226,232,240,.9);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:14px}.metric{min-height:92px}.metric .label{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}.metric .value{font-size:26px;font-weight:900;margin-top:6px;letter-spacing:-.04em}.metric .sub{font-size:12px;color:var(--muted);margin-top:4px}.progress{height:10px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:10px}.bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));width:0}h2{font-size:18px;margin:0 0 12px;letter-spacing:-.02em}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}button{border:0;border-radius:14px;padding:10px 12px;font-weight:800;background:#e2e8f0;color:#0f172a;cursor:pointer}button.primary{background:linear-gradient(135deg,var(--blue),var(--purple));color:white}button.good{background:#dcfce7;color:#166534}button.warn{background:#ffedd5;color:#9a3412}button.danger{background:#fee2e2;color:#991b1b}button.small{font-size:12px;padding:8px 10px;border-radius:11px}form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.full{grid-column:1/-1}label{display:block;font-size:12px;color:var(--muted);font-weight:800;margin-bottom:5px}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:14px;background:white;padding:11px 12px;font-size:16px;color:var(--ink)}textarea{min-height:76px;resize:vertical}.mods{display:grid;gap:10px}.mod{border:1px solid var(--line);border-radius:18px;background:#fff;padding:12px}.mod-top{display:flex;justify-content:space-between;gap:10px}.mod-title{font-weight:900}.mod-meta{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35}.status{font-size:12px;font-weight:900;border-radius:999px;padding:6px 9px;height:max-content;white-space:nowrap}.s-not{background:#fee2e2;color:#991b1b}.s-progress{background:#dbeafe;color:#1d4ed8}.s-done{background:#dcfce7;color:#166534}.mod-notes{font-size:13px;color:#334155;margin-top:8px;white-space:pre-wrap}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.empty{color:var(--muted);font-size:14px;padding:12px;border:1px dashed var(--line);border-radius:16px;background:#f8fafc}.insight{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.insight div{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:12px}.insight b{display:block;font-size:18px}.insight span{color:var(--muted);font-size:12px}.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);padding:20px;z-index:10;align-items:center;justify-content:center}.modal.open{display:flex}.modal-box{background:white;border-radius:22px;max-width:420px;width:100%;padding:16px;box-shadow:0 25px 80px rgba(0,0,0,.25)}.file{display:none}.controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px}.chart-wrap{overflow-x:auto}.chart{min-width:720px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px}.badge{display:inline-block;background:#f1f5f9;border:1px solid var(--line);padding:4px 8px;border-radius:999px;font-size:12px;color:#475569;margin-top:6px}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}form{grid-template-columns:1fr}.insight{grid-template-columns:repeat(2,1fr)}.controls{grid-template-columns:1fr 1fr}.top{display:block}.pill{display:inline-block;margin-top:10px}.app{padding:12px}.title h1{font-size:25px}}@media(max-width:520px){.insight{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.metric .value{font-size:23px}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Walmart Modular Planner</title>
+  <meta name="theme-color" content="#2563eb" />
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: rgba(255,255,255,.86);
+      --card-solid: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: rgba(15,23,42,.1);
+      --blue: #2563eb;
+      --purple: #7c3aed;
+      --green: #16a34a;
+      --orange: #f97316;
+      --red: #dc2626;
+      --shadow: 0 16px 45px rgba(15, 23, 42, .10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.18), transparent 34%),
+        radial-gradient(circle at top right, rgba(124,58,237,.16), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 90px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .home-button {
+      align-self: flex-start;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: .9rem;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      box-shadow: 0 8px 22px rgba(37, 99, 235, .28);
+      cursor: pointer;
+    }
+
+    .home-button:active { transform: scale(.97); }
+
+    .title-card {
+      padding: 20px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(124,58,237,.92));
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .title-card h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .title-card p {
+      margin: 8px 0 0;
+      opacity: .9;
+      line-height: 1.4;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .metric {
+      background: rgba(255,255,255,.74);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .metric .value {
+      margin-top: 6px;
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .metric .sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.9);
+      padding: 12px;
+      font: inherit;
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea { min-height: 84px; resize: vertical; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(37,99,235,.7);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .field-2 { grid-column: span 2; }
+    .field-3 { grid-column: span 3; }
+    .field-4 { grid-column: span 4; }
+    .field-6 { grid-column: span 6; }
+    .field-8 { grid-column: span 8; }
+    .field-12 { grid-column: span 12; }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-weight: 900;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .primary {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      box-shadow: 0 10px 24px rgba(37,99,235,.22);
+    }
+
+    .secondary {
+      color: var(--text);
+      background: rgba(226,232,240,.9);
+    }
+
+    .danger {
+      color: white;
+      background: var(--red);
+    }
+
+    .success {
+      color: white;
+      background: var(--green);
+    }
+
+    .warning {
+      color: white;
+      background: var(--orange);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mod-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mod-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.78);
+    }
+
+    .mod-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .mod-title {
+      font-weight: 950;
+      font-size: 1.02rem;
+      letter-spacing: -0.02em;
+    }
+
+    .mod-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(226,232,240,.9);
+      color: #334155;
+      font-weight: 800;
+      font-size: .78rem;
+    }
+
+    .pill.green { background: rgba(22,163,74,.12); color: #15803d; }
+    .pill.orange { background: rgba(249,115,22,.14); color: #c2410c; }
+    .pill.red { background: rgba(220,38,38,.12); color: #b91c1c; }
+    .pill.blue { background: rgba(37,99,235,.12); color: #1d4ed8; }
+
+    .progress {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(148,163,184,.28);
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      width: 0%;
+    }
+
+    .mod-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .small {
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: .84rem;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 22px;
+      border: 1px dashed rgba(100,116,139,.35);
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+    }
+
+    canvas {
+      width: 100%;
+      min-height: 280px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 10px;
+    }
+
+    .associate-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      font-size: .9rem;
+    }
+
+    .associate-table th,
+    .associate-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .associate-table th {
+      color: var(--muted);
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .backup-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hidden-file { display: none; }
+
+    @media (max-width: 860px) {
+      .span-8, .span-6, .span-4 { grid-column: span 12; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .field-2, .field-3, .field-4, .field-6, .field-8 { grid-column: span 12; }
+    }
+
+    @media (max-width: 520px) {
+      .app { padding: 12px 10px 80px; }
+      .metrics { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      .mod-top { flex-direction: column; }
+      button { width: 100%; }
+      .home-button { width: auto; }
+    }
+  </style>
 </head>
+
 <body>
-<div class="app">
-  <div class="top"><div class="title"><h1>Modular Planner</h1><p>Local one-page tracker for Walmart modular planning.</p></div><div class="pill">Saved locally on this device</div></div>
-  <section class="grid" id="dashboard"></section>
-  <section class="card"><div class="section-head"><h2>7-Day Workload Graph</h2><div class="toolbar"><button class="small" onclick="drawChart()">Refresh Graph</button></div></div><div class="chart-wrap"><canvas id="workloadChart" class="chart" width="920" height="360"></canvas></div><div class="legend" id="chartLegend"></div></section>
-  <section class="card"><div class="section-head"><h2>Deeper Metrics</h2><div class="toolbar"><button class="small" onclick="exportBackup()">Export Backup</button><button class="small" onclick="document.getElementById('importFile').click()">Import Backup</button><button class="small danger" onclick="clearAll()">Clear All</button><input class="file" id="importFile" type="file" accept="application/json" onchange="importBackup(event)"></div></div><div class="insight" id="insights"></div></section>
-  <section class="card"><h2>Add / Update Modular</h2><form id="modForm"><input type="hidden" id="editId"><div><label>Department</label><input id="department" placeholder="Ex: 72" required></div><div><label>Category</label><input id="category" placeholder="Ex: TVs" required></div><div class="full"><label>Category Description</label><input id="description" placeholder="Ex: 65 inch TV wall reset"></div><div><label>Assigned Associate</label><input id="assignee" list="associateList" placeholder="Ex: Devon"><datalist id="associateList"></datalist></div><div><label>Number of Sections</label><input id="sections" type="number" min="1" step="1" required></div><div><label>Labor Hours</label><input id="labor" type="number" min="0" step="0.25" required></div><div><label>Planned Set Date</label><input id="date" type="date"></div><div><label>Status</label><select id="status"><option value="not">Not Started</option><option value="progress">In Progress</option><option value="done">Complete</option></select></div><div class="full"><label>Notes</label><textarea id="notes" placeholder="Fixtures, signing, aisle notes, blockers, etc."></textarea></div><div class="full toolbar"><button class="primary" type="submit">Save Modular</button><button type="button" onclick="resetForm()">Reset Form</button><button type="button" onclick="setTodayDate()">Use Today</button></div></form></section>
-  <section class="card"><div class="section-head"><h2>Today’s Plan</h2><span class="badge" id="todaySummary"></span></div><div id="todayList" class="mods"></div></section>
-  <section class="card"><h2>Unscheduled Modulars</h2><div id="unscheduledList" class="mods"></div></section>
-  <section class="card"><div class="section-head"><h2>All Modulars</h2></div><div class="controls"><div><label>Search</label><input id="search" placeholder="Dept, category, associate, notes" oninput="render()"></div><div><label>Status</label><select id="filterStatus" onchange="render()"><option value="all">All</option><option value="open">Open</option><option value="not">Not Started</option><option value="progress">In Progress</option><option value="done">Complete</option><option value="overdue">Overdue</option><option value="today">Today</option><option value="unscheduled">Unscheduled</option></select></div><div><label>Associate</label><select id="filterAssignee" onchange="render()"><option value="all">All Associates</option><option value="unassigned">Unassigned</option></select></div><div><label>Sort By</label><select id="sortBy" onchange="render()"><option value="recommended">Recommended</option><option value="dateAsc">Date ↑</option><option value="dateDesc">Date ↓</option><option value="laborDesc">Labor High → Low</option><option value="laborAsc">Labor Low → High</option><option value="dept">Department</option><option value="assignee">Associate</option><option value="status">Status</option></select></div></div><div id="allList" class="mods"></div></section>
-</div>
-<div class="modal" id="dateModal"><div class="modal-box"><h2>Schedule Later</h2><p style="color:var(--muted);font-size:14px">Choose a planned set date for this modular.</p><input id="laterDate" type="date"><div class="toolbar" style="margin-top:12px"><button class="primary" onclick="confirmLaterDate()">Schedule</button><button onclick="closeModal()">Cancel</button></div></div></div>
-<script>
-const KEY='walmart_modular_tracker_v3';let mods=load().map(m=>({...m,assignee:m.assignee||''}));let laterTarget=null;const $=id=>document.getElementById(id);const colors=['#2563eb','#7c3aed','#16a34a','#f97316','#dc2626','#0891b2','#be123c','#4f46e5'];
-function today(){return new Date().toISOString().slice(0,10)}function addDays(n){const x=new Date();x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}function niceDate(s){if(!s)return 'Unscheduled';const [y,m,d]=s.split('-');return `${m}/${d}`}function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return []}}function save(){localStorage.setItem(KEY,JSON.stringify(mods));render()}function fmt(n){return Number(n||0).toFixed(Number(n||0)%1?2:0)}function statusText(s){return s==='done'?'Complete':s==='progress'?'In Progress':'Not Started'}function statusClass(s){return s==='done'?'s-done':s==='progress'?'s-progress':'s-not'}function esc(s){return String(s||'').replace(/[&<>'"]/g,a=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[a]))}
-function resetForm(){['editId','department','category','description','assignee','sections','labor','date','notes'].forEach(id=>$(id).value='');$('status').value='not'}function setTodayDate(){$('date').value=today()}
-$('modForm').addEventListener('submit',e=>{e.preventDefault();const id=$('editId').value||crypto.randomUUID();const item={id,department:$('department').value.trim(),category:$('category').value.trim(),description:$('description').value.trim(),assignee:$('assignee').value.trim(),sections:+$('sections').value,labor:+$('labor').value,date:$('date').value,status:$('status').value,notes:$('notes').value.trim(),updated:new Date().toISOString()};mods=mods.filter(m=>m.id!==id).concat(item);resetForm();save()});
-function score(m){let s=(+m.labor||0)*2+(+m.sections||0);if(!m.date)s+=8;else{const diff=(new Date(m.date)-new Date(today()))/86400000;if(diff<0)s+=30;else if(diff<=2)s+=18;else if(diff<=7)s+=8}if(m.status==='progress')s+=6;if(!m.assignee)s+=2;return s}
-function calc(){const total=mods.length,done=mods.filter(m=>m.status==='done').length,open=mods.filter(m=>m.status!=='done'),labor=mods.reduce((s,m)=>s+(+m.labor||0),0),doneLabor=mods.filter(m=>m.status==='done').reduce((s,m)=>s+(+m.labor||0),0),remaining=labor-doneLabor,t=today();const todayMods=mods.filter(m=>m.date===t&&m.status!=='done'),uns=mods.filter(m=>!m.date&&m.status!=='done'),over=mods.filter(m=>m.date&&m.date<t&&m.status!=='done'),next7=mods.filter(m=>m.date&&m.date>=t&&m.date<=addDays(6)&&m.status!=='done'),sectionsOpen=open.reduce((s,m)=>s+(+m.sections||0),0),next=[...open].sort((a,b)=>score(b)-score(a))[0];const unassigned=open.filter(m=>!m.assignee).length;return{total,done,open,labor,doneLabor,remaining,todayMods,uns,over,next7,sectionsOpen,next,unassigned,completion:total?Math.round(done/total*100):0,laborCompletion:labor?Math.round(doneLabor/labor*100):0,avgSection:sectionsOpen?remaining/sectionsOpen:0}}
-function associateNames(){return [...new Set(mods.map(m=>(m.assignee||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b))}
-function updateAssociateControls(){const names=associateNames();$('associateList').innerHTML=names.map(n=>`<option value="${esc(n)}"></option>`).join('');const cur=$('filterAssignee').value;$('filterAssignee').innerHTML='<option value="all">All Associates</option><option value="unassigned">Unassigned</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');$('filterAssignee').value=[...names,'all','unassigned'].includes(cur)?cur:'all'}
-function render(){updateAssociateControls();const c=calc();$('dashboard').innerHTML=`<div class="card metric"><div class="label">Completion</div><div class="value">${c.completion}%</div><div class="sub">${c.done} of ${c.total} complete</div><div class="progress"><div class="bar" style="width:${c.completion}%"></div></div></div><div class="card metric"><div class="label">Remaining Labor</div><div class="value">${fmt(c.remaining)}</div><div class="sub">${fmt(c.laborCompletion)}% labor completed</div><div class="progress"><div class="bar" style="width:${c.laborCompletion}%"></div></div></div><div class="card metric"><div class="label">Today’s Workload</div><div class="value">${fmt(c.todayMods.reduce((s,m)=>s+(+m.labor||0),0))}</div><div class="sub">${c.todayMods.length} modular(s) scheduled today</div></div><div class="card metric"><div class="label">Recommended Next</div><div class="value" style="font-size:18px">${c.next?esc(c.next.category):'None'}</div><div class="sub">${c.next?`Dept ${esc(c.next.department)} • ${fmt(c.next.labor)} hrs • ${esc(c.next.assignee||'Unassigned')}`:'Add an open modular'}</div></div>`;$('insights').innerHTML=`<div><b>${c.over.length}</b><span>Overdue open modulars</span></div><div><b>${c.uns.length}</b><span>Unscheduled open modulars</span></div><div><b>${c.next7.length}</b><span>Open modulars due in next 7 days</span></div><div><b>${c.unassigned}</b><span>Open modulars unassigned</span></div><div><b>${fmt(c.sectionsOpen)}</b><span>Sections still open</span></div><div><b>${fmt(c.avgSection)}</b><span>Avg remaining labor per open section</span></div><div><b>${fmt(c.open.length?c.remaining/c.open.length:0)}</b><span>Avg hours per open modular</span></div><div><b>${topAssociateText()}</b><span>Heaviest 7-day associate load</span></div>`;$('todaySummary').textContent=`${c.todayMods.length} mods • ${fmt(c.todayMods.reduce((s,m)=>s+(+m.labor||0),0))} labor hours`;list('todayList',sortMods(c.todayMods,'assignee'),true);list('unscheduledList',c.uns.sort((a,b)=>score(b)-score(a)),false);list('allList',sortMods(filteredMods(),$('sortBy').value),true);drawChart()}
-function filteredMods(){let arr=[...mods];const q=$('search').value.trim().toLowerCase(),f=$('filterStatus').value,a=$('filterAssignee').value,t=today();if(q)arr=arr.filter(m=>[m.department,m.category,m.description,m.assignee,m.notes].join(' ').toLowerCase().includes(q));if(f==='open')arr=arr.filter(m=>m.status!=='done');if(f==='not'||f==='progress'||f==='done')arr=arr.filter(m=>m.status===f);if(f==='overdue')arr=arr.filter(m=>m.date&&m.date<t&&m.status!=='done');if(f==='today')arr=arr.filter(m=>m.date===t);if(f==='unscheduled')arr=arr.filter(m=>!m.date);if(a==='unassigned')arr=arr.filter(m=>!m.assignee);else if(a!=='all')arr=arr.filter(m=>m.assignee===a);return arr}
-function sortMods(arr,sort){const statusOrder={progress:0,not:1,done:2};return [...arr].sort((a,b)=>{if(sort==='recommended')return score(b)-score(a);if(sort==='dateAsc')return (a.date||'9999-99-99').localeCompare(b.date||'9999-99-99');if(sort==='dateDesc')return (b.date||'0000-00-00').localeCompare(a.date||'0000-00-00');if(sort==='laborDesc')return (+b.labor||0)-(+a.labor||0);if(sort==='laborAsc')return (+a.labor||0)-(+b.labor||0);if(sort==='dept')return String(a.department).localeCompare(String(b.department),undefined,{numeric:true});if(sort==='assignee')return (a.assignee||'Unassigned').localeCompare(b.assignee||'Unassigned')||(a.date||'').localeCompare(b.date||'');if(sort==='status')return statusOrder[a.status]-statusOrder[b.status];return 0})}
-function list(id,arr,showEmpty){$(id).innerHTML=arr.length?arr.map(card).join(''):(showEmpty!==false?'<div class="empty">Nothing to show here yet.</div>':'<div class="empty">No unscheduled open modulars.</div>')}function card(m){return `<div class="mod"><div class="mod-top"><div><div class="mod-title">Dept ${esc(m.department)} • ${esc(m.category)}</div><div class="mod-meta">${m.date?`Planned ${m.date}`:'Unscheduled'} • ${fmt(m.sections)} sections • ${fmt(m.labor)} labor hrs<br>Assigned: <b>${esc(m.assignee||'Unassigned')}</b></div></div><div class="status ${statusClass(m.status)}">${statusText(m.status)}</div></div>${m.description?`<div class="mod-notes"><b>${esc(m.description)}</b></div>`:''}${m.notes?`<div class="mod-notes">${esc(m.notes)}</div>`:''}<div class="actions"><button class="small" onclick="editMod('${m.id}')">Edit</button>${m.status!=='done'?`<button class="small good" onclick="setStatus('${m.id}','done')">Mark Complete</button>`:''}${m.status==='not'?`<button class="small" onclick="setStatus('${m.id}','progress')">Start</button>`:''}<button class="small warn" onclick="scheduleToday('${m.id}')">Schedule for Today</button><button class="small" onclick="openLater('${m.id}')">Schedule Later</button><button class="small danger" onclick="delMod('${m.id}')">Delete</button></div></div>`}
-function editMod(id){const m=mods.find(x=>x.id===id);if(!m)return;$('editId').value=m.id;$('department').value=m.department;$('category').value=m.category;$('description').value=m.description||'';$('assignee').value=m.assignee||'';$('sections').value=m.sections;$('labor').value=m.labor;$('date').value=m.date||'';$('status').value=m.status;$('notes').value=m.notes||'';scrollTo({top:420,behavior:'smooth'})}function setStatus(id,status){mods=mods.map(m=>m.id===id?{...m,status}:m);save()}function scheduleToday(id){mods=mods.map(m=>m.id===id?{...m,date:today()}:m);save()}function openLater(id){laterTarget=id;$('laterDate').value=today();$('dateModal').classList.add('open')}function closeModal(){$('dateModal').classList.remove('open');laterTarget=null}function confirmLaterDate(){const d=$('laterDate').value;if(!d||!laterTarget)return;mods=mods.map(m=>m.id===laterTarget?{...m,date:d}:m);closeModal();save()}function delMod(id){if(confirm('Delete this modular?')){mods=mods.filter(m=>m.id!==id);save()}}function clearAll(){if(confirm('This deletes all saved modulars on this device. Export a backup first if needed. Continue?')){mods=[];save()}}
-function workloadData(){const days=Array.from({length:7},(_,i)=>addDays(i));const names=associateNames();const rows=days.map(d=>{const dayMods=mods.filter(m=>m.date===d&&m.status!=='done');const total=dayMods.reduce((s,m)=>s+(+m.labor||0),0);const by={};dayMods.forEach(m=>{const n=m.assignee||'Unassigned';by[n]=(by[n]||0)+(+m.labor||0)});return{date:d,total,by}});return{days,names:[...new Set([...names,'Unassigned'].filter(n=>rows.some(r=>r.by[n])))],rows}}
-function topAssociateText(){const data=workloadData();let best={name:'None',hours:0};data.names.forEach(n=>{const h=data.rows.reduce((s,r)=>s+(r.by[n]||0),0);if(h>best.hours)best={name:n,hours:h}});return best.hours?`${best.name}: ${fmt(best.hours)}h`:'None'}
-function drawChart(){const canvas=$('workloadChart');if(!canvas)return;const ctx=canvas.getContext('2d'),data=workloadData(),W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);ctx.font='12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';const pad={l:48,r:22,t:20,b:58},cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;const max=Math.max(4,...data.rows.map(r=>r.total))*1.2;ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;for(let i=0;i<=4;i++){const y=pad.t+ch-(ch*i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();ctx.fillStyle='#64748b';ctx.fillText(fmt(max*i/4),8,y+4)}const groupW=cw/7,barW=Math.min(42,groupW*.42);data.rows.forEach((r,i)=>{const x=pad.l+i*groupW+groupW*.18;let yBase=pad.t+ch;let stackX=x;Object.entries(r.by).forEach(([name,h],idx)=>{const bh=ch*(h/max);ctx.fillStyle=colors[data.names.indexOf(name)%colors.length]||'#94a3b8';ctx.fillRect(stackX,yBase-bh,barW,bh);yBase-=bh});const lineH=ch*(r.total/max);ctx.strokeStyle='#0f172a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+barW+8,pad.t+ch);ctx.lineTo(x+barW+8,pad.t+ch-lineH);ctx.stroke();ctx.fillStyle='#0f172a';ctx.fillText(fmt(r.total)+'h',x,pad.t+ch-lineH-6);ctx.fillStyle='#64748b';ctx.fillText(i===0?'Today':niceDate(r.date),x-2,H-28);ctx.fillText(new Date(r.date+'T00:00:00').toLocaleDateString(undefined,{weekday:'short'}),x-1,H-12)});ctx.fillStyle='#64748b';ctx.fillText('Labor hours',8,14);$('chartLegend').innerHTML=data.names.map((n,i)=>`<span><i style="background:${colors[i%colors.length]}"></i>${esc(n)}</span>`).join('')+'<span><i style="background:#0f172a"></i>Total per day marker</span>'}
-function exportBackup(){const blob=new Blob([JSON.stringify({app:'Walmart Modular Planner',version:4,exported:new Date().toISOString(),mods},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='modular-planner-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}function importBackup(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);const incoming=Array.isArray(data)?data:data.mods;if(!Array.isArray(incoming))throw Error();if(confirm('Import backup? This will replace the modulars currently saved on this device.')){mods=incoming.map(m=>({...m,assignee:m.assignee||''}));save()}}catch{alert('That backup file could not be read.')}};r.readAsText(file);e.target.value=''}render();
-</script>
+  <main class="app">
+    <header>
+      <button class="home-button" onclick="goHome()">← Return to Home</button>
+      <section class="title-card">
+        <h1>Modular Planner</h1>
+        <p>Plan Walmart modular work, assign associates, track workload, and keep everything saved locally on this device.</p>
+      </section>
+    </header>
+
+    <section class="grid">
+      <section class="card span-12">
+        <h2>Dashboard</h2>
+        <div class="metrics">
+          <div class="metric">
+            <div class="label">Completion</div>
+            <div class="value" id="completionPct">0%</div>
+            <div class="sub" id="completionSub">0 of 0 mods complete</div>
+          </div>
+          <div class="metric">
+            <div class="label">Remaining Labor</div>
+            <div class="value" id="remainingLabor">0h</div>
+            <div class="sub">Open labor hours</div>
+          </div>
+          <div class="metric">
+            <div class="label">Today’s Workload</div>
+            <div class="value" id="todayLabor">0h</div>
+            <div class="sub" id="todaySub">0 mods scheduled today</div>
+          </div>
+          <div class="metric">
+            <div class="label">Recommended Next</div>
+            <div class="value" id="nextMod">None</div>
+            <div class="sub" id="nextModSub">Add a modular to begin</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card span-8">
+        <h2>7-Day Workload Graph</h2>
+        <canvas id="workloadChart" width="1000" height="360"></canvas>
+      </section>
+
+      <section class="card span-4">
+        <h2>Associate Workload</h2>
+        <table class="associate-table">
+          <thead>
+            <tr>
+              <th>Associate</th>
+              <th>7-Day Hours</th>
+              <th>Mods</th>
+            </tr>
+          </thead>
+          <tbody id="associateWorkloadBody"></tbody>
+        </table>
+      </section>
+
+      <section class="card span-12">
+        <h2>Add / Edit Modular</h2>
+        <form id="modForm">
+          <input type="hidden" id="editingId" />
+
+          <label class="field-3">Department
+            <input id="department" placeholder="Ex: 72" required />
+          </label>
+
+          <label class="field-3">Category
+            <input id="category" placeholder="Ex: Toys" required />
+          </label>
+
+          <label class="field-6">Category Description
+            <input id="categoryDescription" placeholder="Ex: Preschool toys aisle refresh" />
+          </label>
+
+          <label class="field-3">Number of Sections
+            <input id="sections" type="number" min="0" step="1" placeholder="0" />
+          </label>
+
+          <label class="field-3">Labor Hours
+            <input id="laborHours" type="number" min="0" step="0.25" placeholder="0" />
+          </label>
+
+          <label class="field-3">Planned Set Date
+            <input id="plannedDate" type="date" />
+          </label>
+
+          <label class="field-3">Assigned To
+            <input id="assignedTo" placeholder="Associate name" list="associateNames" />
+            <datalist id="associateNames"></datalist>
+          </label>
+
+          <label class="field-3">Status
+            <select id="status">
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Complete">Complete</option>
+            </select>
+          </label>
+
+          <label class="field-9">Notes
+            <textarea id="notes" placeholder="Add notes, blockers, fixture needs, aisle details, etc."></textarea>
+          </label>
+
+          <div class="field-12 btn-row">
+            <button class="primary" type="submit" id="saveButton">Save Modular</button>
+            <button class="secondary" type="button" onclick="resetForm()">Clear Form</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card span-6">
+        <h2>Today’s Plan</h2>
+        <div id="todayPlanList" class="mod-list"></div>
+      </section>
+
+      <section class="card span-6">
+        <h2>Unscheduled Mods</h2>
+        <div id="unscheduledList" class="mod-list"></div>
+      </section>
+
+      <section class="card span-12">
+        <h2>All Modulars</h2>
+
+        <div class="toolbar">
+          <input id="searchInput" placeholder="Search department, category, description, associate, notes..." />
+          <select id="statusFilter">
+            <option value="All">All Statuses</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Complete">Complete</option>
+          </select>
+          <select id="dateFilter">
+            <option value="All">All Dates</option>
+            <option value="Today">Today</option>
+            <option value="Next 7 Days">Next 7 Days</option>
+            <option value="Overdue">Overdue</option>
+            <option value="Unscheduled">Unscheduled</option>
+          </select>
+          <select id="sortBy">
+            <option value="dateAsc">Sort: Date Soonest</option>
+            <option value="dateDesc">Sort: Date Latest</option>
+            <option value="laborDesc">Sort: Labor High-Low</option>
+            <option value="laborAsc">Sort: Labor Low-High</option>
+            <option value="sectionsDesc">Sort: Sections High-Low</option>
+            <option value="associateAsc">Sort: Associate A-Z</option>
+            <option value="departmentAsc">Sort: Department A-Z</option>
+            <option value="statusAsc">Sort: Status</option>
+          </select>
+        </div>
+
+        <div id="modList" class="mod-list"></div>
+      </section>
+
+      <section class="card span-12">
+        <h2>Backup / Restore</h2>
+        <p style="color:var(--muted); margin-top:0;">This app saves to this browser only. Export a backup before switching devices or clearing browser data.</p>
+        <div class="backup-row">
+          <button class="secondary" onclick="exportBackup()">Export Backup</button>
+          <button class="secondary" onclick="document.getElementById('importFile').click()">Import Backup</button>
+          <button class="danger" onclick="clearAllData()">Clear All Saved Modulars</button>
+          <input class="hidden-file" id="importFile" type="file" accept="application/json" />
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "walmart_modular_planner_v3";
+    let mods = loadMods();
+
+    const $ = (id) => document.getElementById(id);
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function todayString() {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 10);
+    }
+
+    function addDays(dateString, days) {
+      const d = new Date(dateString + "T00:00:00");
+      d.setDate(d.getDate() + days);
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 10);
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "Unscheduled";
+      const d = new Date(dateString + "T00:00:00");
+      return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    }
+
+    function loadMods() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveMods() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(mods));
+      render();
+    }
+
+    function getFormData() {
+      return {
+        id: $("editingId").value || crypto.randomUUID(),
+        department: $("department").value.trim(),
+        category: $("category").value.trim(),
+        categoryDescription: $("categoryDescription").value.trim(),
+        sections: Number($("sections").value || 0),
+        laborHours: Number($("laborHours").value || 0),
+        plannedDate: $("plannedDate").value,
+        assignedTo: $("assignedTo").value.trim(),
+        status: $("status").value,
+        notes: $("notes").value.trim(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    function setFormData(mod) {
+      $("editingId").value = mod.id;
+      $("department").value = mod.department || "";
+      $("category").value = mod.category || "";
+      $("categoryDescription").value = mod.categoryDescription || "";
+      $("sections").value = mod.sections || "";
+      $("laborHours").value = mod.laborHours || "";
+      $("plannedDate").value = mod.plannedDate || "";
+      $("assignedTo").value = mod.assignedTo || "";
+      $("status").value = mod.status || "Not Started";
+      $("notes").value = mod.notes || "";
+      $("saveButton").textContent = "Update Modular";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetForm() {
+      $("modForm").reset();
+      $("editingId").value = "";
+      $("saveButton").textContent = "Save Modular";
+    }
+
+    $("modForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = getFormData();
+
+      if (!data.department || !data.category) {
+        alert("Department and category are required.");
+        return;
+      }
+
+      const existingIndex = mods.findIndex(m => m.id === data.id);
+      if (existingIndex >= 0) {
+        data.createdAt = mods[existingIndex].createdAt || data.createdAt;
+        mods[existingIndex] = data;
+      } else {
+        mods.push(data);
+      }
+
+      resetForm();
+      saveMods();
+    });
+
+    ["searchInput", "statusFilter", "dateFilter", "sortBy"].forEach(id => {
+      window.addEventListener("DOMContentLoaded", () => {
+        $(id).addEventListener("input", renderAllList);
+        $(id).addEventListener("change", renderAllList);
+      });
+    });
+
+    $("importFile").addEventListener("change", importBackup);
+
+    function completionWeight(status) {
+      if (status === "Complete") return 1;
+      if (status === "In Progress") return .5;
+      return 0;
+    }
+
+    function isOpen(mod) {
+      return mod.status !== "Complete";
+    }
+
+    function getRemainingLabor(mod) {
+      const hours = Number(mod.laborHours || 0);
+      if (mod.status === "Complete") return 0;
+      if (mod.status === "In Progress") return hours * .5;
+      return hours;
+    }
+
+    function getStatusPill(status) {
+      if (status === "Complete") return "green";
+      if (status === "In Progress") return "orange";
+      return "blue";
+    }
+
+    function getDateCategory(mod) {
+      const today = todayString();
+      if (!mod.plannedDate) return "Unscheduled";
+      if (mod.plannedDate < today && mod.status !== "Complete") return "Overdue";
+      if (mod.plannedDate === today) return "Today";
+      if (mod.plannedDate <= addDays(today, 6)) return "Next 7 Days";
+      return "Future";
+    }
+
+    function renderDashboard() {
+      const total = mods.length;
+      const complete = mods.filter(m => m.status === "Complete").length;
+      const pct = total ? Math.round((complete / total) * 100) : 0;
+      const remaining = mods.reduce((sum, m) => sum + getRemainingLabor(m), 0);
+
+      const today = todayString();
+      const todayMods = mods.filter(m => m.plannedDate === today && m.status !== "Complete");
+      const todayHours = todayMods.reduce((sum, m) => sum + getRemainingLabor(m), 0);
+
+      const next = [...mods]
+        .filter(isOpen)
+        .sort((a, b) => {
+          const aDate = a.plannedDate || "9999-12-31";
+          const bDate = b.plannedDate || "9999-12-31";
+          if (aDate !== bDate) return aDate.localeCompare(bDate);
+          return Number(b.laborHours || 0) - Number(a.laborHours || 0);
+        })[0];
+
+      $("completionPct").textContent = pct + "%";
+      $("completionSub").textContent = `${complete} of ${total} mods complete`;
+      $("remainingLabor").textContent = roundOne(remaining) + "h";
+      $("todayLabor").textContent = roundOne(todayHours) + "h";
+      $("todaySub").textContent = `${todayMods.length} mods scheduled today`;
+      $("nextMod").textContent = next ? `${next.department} ${next.category}` : "None";
+      $("nextModSub").textContent = next
+        ? `${formatDate(next.plannedDate)} • ${roundOne(getRemainingLabor(next))}h remaining`
+        : "Add a modular to begin";
+    }
+
+    function renderTodayPlan() {
+      const list = $("todayPlanList");
+      const today = todayString();
+      const items = mods
+        .filter(m => m.plannedDate === today && m.status !== "Complete")
+        .sort((a, b) => Number(b.laborHours || 0) - Number(a.laborHours || 0));
+
+      list.innerHTML = items.length
+        ? items.map(modCard).join("")
+        : `<div class="empty">No open modulars are scheduled for today.</div>`;
+    }
+
+    function renderUnscheduled() {
+      const list = $("unscheduledList");
+      const items = mods
+        .filter(m => !m.plannedDate && m.status !== "Complete")
+        .sort((a, b) => Number(b.laborHours || 0) - Number(a.laborHours || 0));
+
+      list.innerHTML = items.length
+        ? items.map(m => modCard(m, true)).join("")
+        : `<div class="empty">No unscheduled modulars.</div>`;
+    }
+
+    function renderAllList() {
+      const list = $("modList");
+      const search = $("searchInput").value.toLowerCase().trim();
+      const statusFilter = $("statusFilter").value;
+      const dateFilter = $("dateFilter").value;
+      const sortBy = $("sortBy").value;
+
+      let filtered = mods.filter(m => {
+        const searchable = [
+          m.department,
+          m.category,
+          m.categoryDescription,
+          m.assignedTo,
+          m.notes,
+          m.status,
+          m.plannedDate
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = !search || searchable.includes(search);
+        const matchesStatus = statusFilter === "All" || m.status === statusFilter;
+        const category = getDateCategory(m);
+        const matchesDate =
+          dateFilter === "All" ||
+          category === dateFilter ||
+          (dateFilter === "Next 7 Days" && (category === "Today" || category === "Next 7 Days"));
+
+        return matchesSearch && matchesStatus && matchesDate;
+      });
+
+      filtered.sort((a, b) => {
+        if (sortBy === "dateAsc") return (a.plannedDate || "9999-12-31").localeCompare(b.plannedDate || "9999-12-31");
+        if (sortBy === "dateDesc") return (b.plannedDate || "").localeCompare(a.plannedDate || "");
+        if (sortBy === "laborDesc") return Number(b.laborHours || 0) - Number(a.laborHours || 0);
+        if (sortBy === "laborAsc") return Number(a.laborHours || 0) - Number(b.laborHours || 0);
+        if (sortBy === "sectionsDesc") return Number(b.sections || 0) - Number(a.sections || 0);
+        if (sortBy === "associateAsc") return (a.assignedTo || "zzz").localeCompare(b.assignedTo || "zzz");
+        if (sortBy === "departmentAsc") return String(a.department || "").localeCompare(String(b.department || ""));
+        if (sortBy === "statusAsc") return String(a.status || "").localeCompare(String(b.status || ""));
+        return 0;
+      });
+
+      list.innerHTML = filtered.length
+        ? filtered.map(modCard).join("")
+        : `<div class="empty">No modulars match the current filters.</div>`;
+    }
+
+    function modCard(m, unscheduledMode = false) {
+      const statusClass = getStatusPill(m.status);
+      const dateCategory = getDateCategory(m);
+      const remaining = getRemainingLabor(m);
+      const progress = Math.round(completionWeight(m.status) * 100);
+
+      return `
+        <article class="mod-card">
+          <div class="mod-top">
+            <div>
+              <div class="mod-title">Dept ${escapeHtml(m.department)} • ${escapeHtml(m.category)}</div>
+              <div style="color:var(--muted); margin-top:4px;">${escapeHtml(m.categoryDescription || "No description")}</div>
+            </div>
+            <span class="pill ${statusClass}">${escapeHtml(m.status)}</span>
+          </div>
+
+          <div class="mod-meta">
+            <span class="pill">📅 ${formatDate(m.plannedDate)}</span>
+            <span class="pill">👤 ${escapeHtml(m.assignedTo || "Unassigned")}</span>
+            <span class="pill">📦 ${Number(m.sections || 0)} sections</span>
+            <span class="pill">⏱ ${roundOne(Number(m.laborHours || 0))}h labor</span>
+            <span class="pill ${dateCategory === "Overdue" ? "red" : dateCategory === "Today" ? "orange" : ""}">${dateCategory}</span>
+          </div>
+
+          <div class="progress"><div class="bar" style="width:${progress}%"></div></div>
+
+          ${m.notes ? `<p style="color:var(--muted); margin:10px 0 0;">${escapeHtml(m.notes)}</p>` : ""}
+
+          <div class="mod-actions">
+            <button class="small secondary" onclick="editMod('${m.id}')">Edit</button>
+            <button class="small success" onclick="markComplete('${m.id}')">Mark Complete</button>
+            <button class="small warning" onclick="scheduleToday('${m.id}')">Schedule Today</button>
+            <button class="small secondary" onclick="scheduleLater('${m.id}')">Schedule Later</button>
+            <button class="small danger" onclick="deleteMod('${m.id}')">Delete</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function editMod(id) {
+      const mod = mods.find(m => m.id === id);
+      if (mod) setFormData(mod);
+    }
+
+    function markComplete(id) {
+      const mod = mods.find(m => m.id === id);
+      if (!mod) return;
+      mod.status = "Complete";
+      mod.updatedAt = new Date().toISOString();
+      saveMods();
+    }
+
+    function scheduleToday(id) {
+      const mod = mods.find(m => m.id === id);
+      if (!mod) return;
+      mod.plannedDate = todayString();
+      mod.updatedAt = new Date().toISOString();
+      saveMods();
+    }
+
+    function scheduleLater(id) {
+      const mod = mods.find(m => m.id === id);
+      if (!mod) return;
+      const date = prompt("Enter planned set date as YYYY-MM-DD:", mod.plannedDate || todayString());
+      if (!date) return;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        alert("Please use YYYY-MM-DD format.");
+        return;
+      }
+      mod.plannedDate = date;
+      mod.updatedAt = new Date().toISOString();
+      saveMods();
+    }
+
+    function deleteMod(id) {
+      if (!confirm("Delete this modular?")) return;
+      mods = mods.filter(m => m.id !== id);
+      saveMods();
+    }
+
+    function renderAssociateDatalist() {
+      const names = [...new Set(mods.map(m => m.assignedTo).filter(Boolean))].sort();
+      $("associateNames").innerHTML = names.map(n => `<option value="${escapeHtml(n)}"></option>`).join("");
+    }
+
+    function renderAssociateWorkload() {
+      const today = todayString();
+      const end = addDays(today, 6);
+      const map = new Map();
+
+      mods
+        .filter(m => m.plannedDate && m.plannedDate >= today && m.plannedDate <= end && m.status !== "Complete")
+        .forEach(m => {
+          const name = m.assignedTo || "Unassigned";
+          if (!map.has(name)) map.set(name, { hours: 0, count: 0 });
+          const row = map.get(name);
+          row.hours += getRemainingLabor(m);
+          row.count += 1;
+        });
+
+      const rows = [...map.entries()].sort((a, b) => b[1].hours - a[1].hours);
+      $("associateWorkloadBody").innerHTML = rows.length
+        ? rows.map(([name, data]) => `
+            <tr>
+              <td>${escapeHtml(name)}</td>
+              <td>${roundOne(data.hours)}h</td>
+              <td>${data.count}</td>
+            </tr>
+          `).join("")
+        : `<tr><td colspan="3" style="color:var(--muted);">No workload scheduled in the next 7 days.</td></tr>`;
+    }
+
+    function renderWorkloadChart() {
+      const canvas = $("workloadChart");
+      const ctx = canvas.getContext("2d");
+      const width = canvas.width;
+      const height = canvas.height;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const today = todayString();
+      const days = Array.from({ length: 7 }, (_, i) => addDays(today, i));
+      const totals = days.map(day => mods
+        .filter(m => m.plannedDate === day && m.status !== "Complete")
+        .reduce((sum, m) => sum + getRemainingLabor(m), 0)
+      );
+
+      const associateTotals = {};
+      mods
+        .filter(m => m.plannedDate && m.plannedDate >= today && m.plannedDate <= addDays(today, 6) && m.status !== "Complete")
+        .forEach(m => {
+          const name = m.assignedTo || "Unassigned";
+          if (!associateTotals[name]) associateTotals[name] = Array(7).fill(0);
+          const index = days.indexOf(m.plannedDate);
+          if (index >= 0) associateTotals[name][index] += getRemainingLabor(m);
+        });
+
+      const maxVal = Math.max(1, ...totals, ...Object.values(associateTotals).flat());
+      const pad = 46;
+      const chartW = width - pad * 2;
+      const chartH = height - pad * 2;
+      const barGap = 18;
+      const barW = (chartW - barGap * 6) / 7;
+
+      ctx.font = "24px -apple-system, BlinkMacSystemFont, Segoe UI, Arial";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText("Total workload per day", pad, 30);
+
+      ctx.strokeStyle = "rgba(15,23,42,.12)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad + chartH - (chartH * i / 4);
+        ctx.beginPath();
+        ctx.moveTo(pad, y);
+        ctx.lineTo(width - pad, y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "14px -apple-system, BlinkMacSystemFont, Segoe UI, Arial";
+        ctx.fillText(roundOne(maxVal * i / 4) + "h", 8, y + 4);
+      }
+
+      totals.forEach((val, i) => {
+        const x = pad + i * (barW + barGap);
+        const h = (val / maxVal) * chartH;
+        const y = pad + chartH - h;
+
+        const gradient = ctx.createLinearGradient(0, y, 0, pad + chartH);
+        gradient.addColorStop(0, "#2563eb");
+        gradient.addColorStop(1, "#7c3aed");
+
+        ctx.fillStyle = gradient;
+        roundRect(ctx, x, y, barW, h || 2, 10);
+        ctx.fill();
+
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "15px -apple-system, BlinkMacSystemFont, Segoe UI, Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(roundOne(val) + "h", x + barW / 2, y - 8);
+
+        const d = new Date(days[i] + "T00:00:00");
+        ctx.fillStyle = "#64748b";
+        ctx.font = "14px -apple-system, BlinkMacSystemFont, Segoe UI, Arial";
+        ctx.fillText(d.toLocaleDateString(undefined, { weekday: "short" }), x + barW / 2, height - 18);
+      });
+
+      ctx.textAlign = "left";
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(mods, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `modular-planner-backup-${todayString()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const imported = JSON.parse(reader.result);
+          if (!Array.isArray(imported)) throw new Error("Invalid backup.");
+          if (!confirm("Importing will replace the modulars saved on this device. Continue?")) return;
+          mods = imported;
+          saveMods();
+          alert("Backup imported.");
+        } catch {
+          alert("Could not import that backup file.");
+        } finally {
+          $("importFile").value = "";
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearAllData() {
+      if (!confirm("This will delete all modulars saved in this browser. Continue?")) return;
+      mods = [];
+      saveMods();
+    }
+
+    function roundOne(value) {
+      return Math.round(Number(value || 0) * 10) / 10;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function render() {
+      renderDashboard();
+      renderTodayPlan();
+      renderUnscheduled();
+      renderAllList();
+      renderAssociateDatalist();
+      renderAssociateWorkload();
+      renderWorkloadChart();
+    }
+
+    render();
+  </script>
 </body>
 </html>
