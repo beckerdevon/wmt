@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coverage + Break Planner</title>
-  <!-- WMTHUB coverage planner build: 2026-05-20-fix-associate-modal-timeline-date-refresh -->
+  <!-- WMTHUB coverage planner build: 2026-05-20-mobile-friendly-layout -->
   <style>
     :root{
       --name-col:180px; --slot-w:40px;
@@ -25,6 +25,39 @@
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.58);z-index:10;padding:18px}.modal.show{display:flex}.modalBox{width:min(760px,100%);max-height:90vh;overflow:auto;background:#101c2d;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:18px}.modalTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#122035;border:1px solid var(--line);padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);display:none;z-index:20}.toast.show{display:block}.policyBox{font-size:12px;line-height:1.45;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:18px;padding:12px;margin-top:12px}.footerNote{margin-top:16px;color:var(--muted);font-size:12px;line-height:1.4}
     @media(max-width:980px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.actions{justify-content:flex-start}.wrap{padding:14px}.card.pad{padding:14px}}
     @media(max-width:620px){:root{--name-col:150px;--slot-w:38px}.summary{grid-template-columns:1fr}.row,.row3{grid-template-columns:1fr}.inline{flex-direction:column;align-items:stretch}.alert{flex-direction:column}}
+
+
+    /* Mobile-first refinements */
+    .mobileHint{display:none;color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.35}
+    .timelineWrap{scrollbar-width:thin;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+    @media(max-width:760px){
+      body{overflow-x:hidden;background-attachment:fixed}
+      .wrap{padding:10px 10px 18px}
+      .top{gap:12px;margin-bottom:12px}
+      .brand{align-items:flex-start}.logo{width:40px;height:40px;border-radius:14px;flex:0 0 auto}
+      h1{font-size:28px;line-height:1.02}.sub{font-size:13px;line-height:1.35;max-width:36rem}
+      .actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions .btn{width:100%;padding:11px 10px;text-align:center}
+      .grid{display:flex;flex-direction:column;gap:12px}.grid main{order:1}.grid aside{order:2}
+      .card{border-radius:20px}.card.pad{padding:12px}.card h2{font-size:18px;margin-bottom:10px}.card h3{font-size:15px}
+      .summary{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.metric{padding:12px;border-radius:16px}.metric b{font-size:21px}
+      .tabs{position:sticky;top:0;z-index:6;display:grid;grid-template-columns:1fr 1fr;background:rgba(8,17,31,.88);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:999px;padding:4px;margin:0 0 10px}.tab{padding:10px 8px;border-radius:999px;text-align:center}
+      .mobileHint{display:block}
+      .timeline{min-width:max(660px,calc(var(--name-col) + var(--cols) * var(--slot-w)))}
+      .timelineWrap{border-radius:18px;margin-inline:-2px}
+      .timeHeader,.personRow{grid-template-columns:var(--name-col) calc(var(--cols) * var(--slot-w))}
+      .timeHeader{top:46px}.timeCell{font-size:10px;padding:7px 0}.nameCell{position:sticky;left:0;z-index:2;padding:9px 8px;min-height:52px;background:rgba(12,24,40,.96);box-shadow:8px 0 16px rgba(0,0,0,.18)}
+      .timeHeader .nameCell{z-index:5;background:rgba(8,17,31,.98)}.track{min-height:52px}.slot{height:52px}.bar{height:18px;top:17px}.event{height:26px;top:13px;font-size:10px;padding:6px 7px}.event.short{width:28px!important;min-width:28px;padding:6px 0}
+      .assocItem,.needItem{align-items:flex-start;border-radius:16px;padding:11px}.assocItem .clickName,.needItem>div{min-width:0}.assocItem b,.needItem b{overflow-wrap:anywhere}.small{font-size:11.5px}
+      .planGrid{grid-template-columns:1fr;gap:10px}.personCard{border-radius:18px;padding:12px}.scheduleLine{gap:10px;align-items:center}.scheduleLine b{text-align:right;font-size:13px}
+      .policyBox{font-size:11.5px;border-radius:16px;padding:10px}.fieldline{margin:12px 0}
+      input,select,textarea{min-height:44px;border-radius:13px;font-size:16px}.row,.row3{grid-template-columns:1fr;gap:8px}label{margin-top:8px}.inline{align-items:stretch}
+      .alert{border-radius:18px;padding:12px}.alert .btn{width:100%;margin-top:6px}.pill{padding:6px 8px;font-size:11px;white-space:nowrap}
+      .modal{align-items:flex-end;padding:0;background:rgba(0,0,0,.62)}.modalBox{width:100%;max-height:92vh;border-radius:24px 24px 0 0;padding:14px 12px 18px}.modalTop{position:sticky;top:0;z-index:2;background:#101c2d;padding-bottom:10px}.modalTop h2{font-size:20px;margin:0}.manageGrid{grid-template-columns:1fr 1fr;gap:8px}.manageGrid>div:first-child{grid-column:1/-1}.manageRow{border-radius:16px;padding:10px}.statusBox{border-radius:16px;padding:10px}.toast{width:calc(100% - 24px);border-radius:18px;text-align:center;bottom:12px}
+      .footerNote{font-size:11.5px;margin-top:12px}
+    }
+    @media(max-width:420px){
+      :root{--name-col:112px;--slot-w:30px}.wrap{padding:8px}.actions{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric b{font-size:20px}.nameCell b{font-size:13px}.nameCell .small{font-size:10.5px}.btn{padding:10px 12px}.manageGrid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -69,7 +102,7 @@
         <section class="card pad">
           <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2>Daily Plan</h2><div class="actions"><button class="btn" onclick="autoPlan()">Rebuild Break Plan</button><button class="btn primary" onclick="saveAll()">Save</button></div></div>
           <div class="tabs"><button class="tab active" id="tabTimeline" onclick="setView('timeline')">Timeline</button><button class="tab" id="tabCards" onclick="setView('cards')">Associate Summary</button></div>
-          <div id="timelineView"><div class="timelineWrap"><div class="timeline" id="timeline"></div></div></div>
+          <div id="timelineView"><div class="mobileHint">Swipe sideways to view the full day. Tap an associate name to manage breaks and lunches.</div><div class="timelineWrap"><div class="timeline" id="timeline"></div></div></div>
           <div id="cardsView" style="display:none"><div class="planGrid" id="planCards"></div></div>
           <div class="footerNote">This planner is a planning aid, not legal advice. It is designed for New York non-factory retail coverage planning and keeps all data in this browser’s local storage.</div>
         </section>
@@ -85,6 +118,7 @@ const STORE_KEY='wmthub.coveragePlanner.v1';
 const SETTINGS_KEY='wmthub.coveragePlanner.settings.v1';
 const DAY_KEY_PREFIX='wmthub.coveragePlanner.day.';
 let state={date:new Date().toISOString().slice(0,10),primaryTeam:'Electronics',minCoverage:1,mealLength:60,associates:[],needs:[],covers:[],activeView:'timeline'};
+const isMobile=()=>window.matchMedia('(max-width: 760px)').matches;
 let currentAlert=null;
 let currentManageId=null;
 const $=id=>document.getElementById(id);
@@ -113,6 +147,7 @@ function load(){
       state={...state,...legacy,associates:state.associates,needs:state.needs,covers:state.covers};
     }
   }catch(e){}
+  if(isMobile() && (!state.activeView || state.activeView==='timeline')) state.activeView='cards';
   loadDay(state.date||new Date().toISOString().slice(0,10),false);
 }
 function saveCurrentDay(){
@@ -138,7 +173,7 @@ function changeWorkDate(){
 function syncInputs(){ $('workDate').value=state.date; $('primaryTeam').value=state.primaryTeam; $('minCoverage').value=state.minCoverage; $('mealLength').value=state.mealLength; $('aTeam').value=state.primaryTeam; $('nTeam').value=state.primaryTeam; setViewButtons();}
 function syncStateFromInputs(includeDate=false){if(includeDate)state.date=$('workDate').value||state.date;state.primaryTeam=$('primaryTeam').value.trim()||'Electronics';state.minCoverage=Math.max(1,parseInt($('minCoverage').value||'1'));state.mealLength=parseInt($('mealLength').value||'60')}
 function setViewButtons(){if(!$('tabTimeline')||!$('tabCards'))return;$('tabTimeline').classList.toggle('active',state.activeView==='timeline');$('tabCards').classList.toggle('active',state.activeView==='cards');$('timelineView').style.display=state.activeView==='timeline'?'block':'none';$('cardsView').style.display=state.activeView==='cards'?'block':'none'}
-setTimeout(()=>{$('workDate').addEventListener('change',changeWorkDate);['primaryTeam','minCoverage','mealLength'].forEach(id=>$(id).addEventListener('change',()=>{syncStateFromInputs(false);render();saveAll()}));},0);
+setTimeout(()=>{$('workDate').addEventListener('change',changeWorkDate);['primaryTeam','minCoverage','mealLength'].forEach(id=>$(id).addEventListener('change',()=>{syncStateFromInputs(false);render();saveAll()})); window.addEventListener('resize',()=>{setViewButtons();});},0);
 function addAssociate(){syncStateFromInputs();let name=$('aName').value.trim(); if(!name)return toast('Enter an associate name'); let a={id:uid(),name,team:$('aTeam').value.trim()||state.primaryTeam,role:$('aRole').value.trim(),start:$('aStart').value,end:$('aEnd').value,events:[]}; if(duration(a)<=0)return toast('End time must be after start time'); state.associates.push(a); $('aName').value=''; autoPlan();}
 function removeAssociate(id){state.associates=state.associates.filter(a=>a.id!==id);saveAll();render()}
 function addNeed(){let reason=$('nReason').value.trim()||'Misc. coverage need';let n={id:uid(),reason,start:$('nStart').value,end:$('nEnd').value,team:$('nTeam').value.trim()||state.primaryTeam,count:Math.max(1,parseInt($('nCount').value||'1'))};let s=toMin(n.start),e=toMin(n.end); if(e<=s)e+=1440;if(e-s<5)return toast('Coverage need must be at least 5 minutes');state.needs.push(n);$('nReason').value='';saveAll();render()}
