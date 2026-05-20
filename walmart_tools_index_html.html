@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walmart Planning Hub</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: rgba(255, 255, 255, 0.84);
+      --panel-strong: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --line: rgba(148, 163, 184, 0.28);
+      --blue: #0071ce;
+      --blue-dark: #004f9e;
+      --yellow: #ffc220;
+      --green: #16a34a;
+      --orange: #f97316;
+      --red: #dc2626;
+      --purple: #7c3aed;
+      --shadow: 0 18px 55px rgba(15, 23, 42, 0.10);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(0, 113, 206, 0.16), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255, 194, 32, 0.20), transparent 30rem),
+        linear-gradient(135deg, #f8fbff 0%, #eef3f8 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .spark {
+      width: 50px;
+      height: 50px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 50%, var(--yellow) 0 16%, transparent 17%),
+        conic-gradient(from 0deg, var(--yellow), #ffe08a, var(--yellow));
+      box-shadow: 0 12px 30px rgba(255, 194, 32, 0.35);
+      position: relative;
+    }
+
+    .spark::before,
+    .spark::after {
+      content: "";
+      position: absolute;
+      inset: 11px 22px;
+      border-radius: 999px;
+      background: #fff9d8;
+      transform: rotate(90deg);
+      opacity: 0.9;
+    }
+
+    .spark::after {
+      transform: rotate(0deg);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.5vw, 2.35rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(16px);
+    }
+
+    .refresh-btn {
+      border: none;
+      cursor: pointer;
+      background: var(--text);
+      color: white;
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-weight: 750;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .refresh-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.78);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      padding: 28px;
+      position: relative;
+      min-height: 306px;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 230px;
+      height: 230px;
+      background: radial-gradient(circle, rgba(0, 113, 206, 0.14), transparent 68%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--blue-dark);
+      background: rgba(0, 113, 206, 0.08);
+      border: 1px solid rgba(0, 113, 206, 0.12);
+      font-weight: 750;
+      font-size: 0.86rem;
+    }
+
+    .hero-main h2 {
+      margin: 18px 0 10px;
+      font-size: clamp(2rem, 4vw, 4.3rem);
+      line-height: 0.94;
+      letter-spacing: -0.07em;
+      max-width: 780px;
+    }
+
+    .hero-main .subtext {
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.55;
+      max-width: 720px;
+      margin: 0 0 24px;
+    }
+
+    .tool-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-link {
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tool-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+      border-color: rgba(0, 113, 206, 0.28);
+    }
+
+    .tool-link strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 5px;
+    }
+
+    .tool-link span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      flex: 0 0 auto;
+    }
+
+    .today-card {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.025em;
+    }
+
+    .section-title small {
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .big-number {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+      margin: 2px 0;
+    }
+
+    .metric-note {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .progress-shell {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--yellow));
+      transition: width 0.35s ease;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .mini-stat {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.70);
+      padding: 14px;
+    }
+
+    .mini-stat b {
+      display: block;
+      font-size: 1.3rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .metric-card {
+      padding: 20px;
+      min-height: 148px;
+    }
+
+    .metric-card .label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .metric-card .value {
+      margin: 14px 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.55rem);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .metric-card .caption {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .accent-blue { border-top: 5px solid var(--blue); }
+    .accent-yellow { border-top: 5px solid var(--yellow); }
+    .accent-green { border-top: 5px solid var(--green); }
+    .accent-orange { border-top: 5px solid var(--orange); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.68);
+      border-radius: 18px;
+      padding: 13px 14px;
+    }
+
+    .row-main {
+      min-width: 0;
+    }
+
+    .row-main strong {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .row-main span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+      background: rgba(100,116,139,0.12);
+      color: var(--muted);
+    }
+
+    .badge.green {
+      background: rgba(22, 163, 74, 0.10);
+      color: #15803d;
+    }
+
+    .badge.orange {
+      background: rgba(249, 115, 22, 0.11);
+      color: #c2410c;
+    }
+
+    .badge.red {
+      background: rgba(220, 38, 38, 0.10);
+      color: #b91c1c;
+    }
+
+    .empty {
+      border: 1px dashed rgba(100, 116, 139, 0.35);
+      background: rgba(255,255,255,0.46);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 14px;
+    }
+
+    .storage-panel {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .storage-panel h3 {
+      margin: 0 0 6px;
+      letter-spacing: -0.025em;
+    }
+
+    .storage-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .storage-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .danger-btn {
+      border: 1px solid rgba(220, 38, 38, 0.22);
+      background: rgba(220, 38, 38, 0.08);
+      color: #b91c1c;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    dialog {
+      width: min(680px, calc(100% - 28px));
+      border: none;
+      border-radius: 26px;
+      padding: 0;
+      background: var(--panel-strong);
+      color: var(--text);
+      box-shadow: 0 32px 90px rgba(15, 23, 42, 0.28);
+    }
+
+    dialog::backdrop {
+      background: rgba(15, 23, 42, 0.42);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-inner {
+      padding: 24px;
+    }
+
+    .modal-inner h3 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      letter-spacing: -0.035em;
+    }
+
+    .modal-inner p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .key-list {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.86rem;
+      overflow: auto;
+      max-height: 230px;
+      white-space: pre-wrap;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .two-col,
+      .storage-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-shell {
+        width: min(100% - 22px, 1240px);
+        padding-top: 18px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions,
+      .storage-actions {
+        justify-content: flex-start;
+      }
+
+      .hero-main {
+        padding: 22px;
+      }
+
+      .tool-links,
+      .metrics-grid,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .brand h1 {
+        font-size: 1.55rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="spark" aria-hidden="true"></div>
+        <div>
+          <h1>Walmart Planning Hub</h1>
+          <p>Local dashboard for zoning, modular planning, and future store tools.</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="pill" id="todayStamp">Today</div>
+        <div class="pill" id="storageStamp">Local storage only</div>
+        <button class="refresh-btn" type="button" id="refreshBtn">Refresh metrics</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="eyebrow">Store planning command center</div>
+        <h2>One hub for today’s workload.</h2>
+        <p class="subtext">
+          This page reads the saved data from your zoning and modular planning tools directly from this device.
+          No server, account, database, or cloud sync is used.
+        </p>
+
+        <div class="tool-links" aria-label="Tool links">
+          <a class="tool-link" href="zoning.html">
+            <div>
+              <strong>Zoning Planner</strong>
+              <span>Build today’s zoning plan, review aisles, and track last-zoned activity.</span>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+
+          <a class="tool-link" href="mods.html">
+            <div>
+              <strong>Modular Planner</strong>
+              <span>Track modulars, scheduled set dates, labor hours, and completion.</span>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+      <aside class="card today-card">
+        <div class="section-title">
+          <h3>Today’s execution score</h3>
+          <small id="executionLabel">0%</small>
+        </div>
+        <div class="big-number" id="executionScore">0%</div>
+        <div class="progress-shell" aria-label="Execution progress">
+          <div class="progress-fill" id="executionProgress"></div>
+        </div>
+        <p class="metric-note" id="executionNote">
+          Add zoning tasks or modular work scheduled for today to begin tracking execution.
+        </p>
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <b id="todayZoningTasks">0</b>
+            <span>Zoning tasks today</span>
+          </div>
+          <div class="mini-stat">
+            <b id="todayModTasks">0</b>
+            <span>Mods scheduled today</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metrics-grid" aria-label="Planning metrics">
+      <article class="card metric-card accent-blue">
+        <div class="label">Available zoning labor</div>
+        <div class="value" id="availableZoningLabor">0h</div>
+        <p class="caption" id="availableZoningCaption">Based on today’s team and zoning settings.</p>
+      </article>
+
+      <article class="card metric-card accent-yellow">
+        <div class="label">Zoning labor needed</div>
+        <div class="value" id="zoningLaborNeeded">0h</div>
+        <p class="caption" id="zoningLaborCaption">Based on today’s assigned zoning plan.</p>
+      </article>
+
+      <article class="card metric-card accent-green">
+        <div class="label">Mod completion</div>
+        <div class="value" id="modCompletion">0%</div>
+        <p class="caption" id="modCompletionCaption">Completion percentage across modular records.</p>
+      </article>
+
+      <article class="card metric-card accent-orange">
+        <div class="label">Unscheduled mods</div>
+        <div class="value" id="unscheduledMods">0</div>
+        <p class="caption" id="unscheduledModsCaption">Mods without a planned set date.</p>
+      </article>
+    </section>
+
+    <section class="two-col">
+      <article class="card panel">
+        <div class="section-title">
+          <h3>Zoning priorities</h3>
+          <small id="zoningSummary">No aisles found</small>
+        </div>
+        <div class="list" id="zoningPriorityList"></div>
+      </article>
+
+      <article class="card panel">
+        <div class="section-title">
+          <h3>Modular priorities</h3>
+          <small id="modsSummary">No modulars found</small>
+        </div>
+        <div class="list" id="modsPriorityList"></div>
+      </article>
+    </section>
+
+    <section class="card storage-panel">
+      <div>
+        <h3>Local-device data policy</h3>
+        <p>
+          This dashboard only reads and writes browser localStorage on this device. Keep the dashboard, zoning tool,
+          and modular tool in the same folder so all three pages can reference the same local saved data.
+        </p>
+      </div>
+      <div class="storage-actions">
+        <button class="secondary-btn" type="button" id="showKeysBtn">Show detected data</button>
+        <button class="danger-btn" type="button" id="clearDashboardPrefsBtn">Clear dashboard prefs</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dataDialog">
+    <div class="modal-inner">
+      <h3>Detected local data</h3>
+      <p>
+        These are the localStorage keys this dashboard found and used. This does not upload anything anywhere.
+      </p>
+      <div class="key-list" id="detectedKeysText"></div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" id="closeDialogBtn">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    /**********************************************************************
+     * Walmart Planning Hub
+     * --------------------------------------------------------------------
+     * index.html dashboard for local Walmart planning tools.
+     * Intended sibling pages:
+     *   - zoning.html
+     *   - mods.html
+     *
+     * Data rule:
+     *   - All data is stored locally on the user's device using localStorage.
+     *   - This dashboard does not use external APIs, tracking, databases, or sync.
+     *
+     * Integration note:
+     *   This page tries several likely localStorage keys and data shapes so it
+     *   can read from earlier one-file versions of the tools. For best results,
+     *   future tools should save using the recommended keys below:
+     *
+     *   Zoning tool recommended key:
+     *     walmart_zoning_data
+     *
+     *   Modular planner recommended key:
+     *     walmart_modular_data
+     *
+     *   Suggested zoning shape:
+     *     {
+     *       aisles: [{ id, name, sections, priority, lastZoned, lastZonedBy }],
+     *       team: [{ id, name, startTime, endTime, zoningHours }],
+     *       todaysPlan: [{ id, aisleId, aisleName, laborHours, assignedTo, completed }],
+     *       settings: { zoningHoursPerEightHourShift, zoningStartTime, zoningEndTime }
+     *     }
+     *
+     *   Suggested modular shape:
+     *     {
+     *       mods: [{ id, department, category, categoryDescription, sections, laborHours, plannedSetDate, completed, status, notes }],
+     *       todaysPlan: [{ id, modId, laborHours, completed }]
+     *     }
+     **********************************************************************/
+
+    const STORAGE_KEY_ALIASES = {
+      zoning: [
+        "walmart_zoning_data",
+        "zoning_data",
+        "zoningPlannerData",
+        "zoningPlanner",
+        "wm_zoning_data",
+        "walmartZoningPlanner",
+        "zonePlannerData"
+      ],
+      mods: [
+        "walmart_modular_data",
+        "walmart_mods_data",
+        "mods_data",
+        "modularPlannerData",
+        "modularPlanner",
+        "wm_mods_data",
+        "walmartModularPlanner",
+        "modPlannerData"
+      ],
+      dashboardPrefs: "walmart_planning_dashboard_prefs"
+    };
+
+    const today = new Date();
+    const todayISO = toISODate(today);
+
+    const els = {
+      todayStamp: document.getElementById("todayStamp"),
+      storageStamp: document.getElementById("storageStamp"),
+      refreshBtn: document.getElementById("refreshBtn"),
+      executionLabel: document.getElementById("executionLabel"),
+      executionScore: document.getElementById("executionScore"),
+      executionProgress: document.getElementById("executionProgress"),
+      executionNote: document.getElementById("executionNote"),
+      todayZoningTasks: document.getElementById("todayZoningTasks"),
+      todayModTasks: document.getElementById("todayModTasks"),
+      availableZoningLabor: document.getElementById("availableZoningLabor"),
+      availableZoningCaption: document.getElementById("availableZoningCaption"),
+      zoningLaborNeeded: document.getElementById("zoningLaborNeeded"),
+      zoningLaborCaption: document.getElementById("zoningLaborCaption"),
+      modCompletion: document.getElementById("modCompletion"),
+      modCompletionCaption: document.getElementById("modCompletionCaption"),
+      unscheduledMods: document.getElementById("unscheduledMods"),
+      unscheduledModsCaption: document.getElementById("unscheduledModsCaption"),
+      zoningPriorityList: document.getElementById("zoningPriorityList"),
+      modsPriorityList: document.getElementById("modsPriorityList"),
+      zoningSummary: document.getElementById("zoningSummary"),
+      modsSummary: document.getElementById("modsSummary"),
+      showKeysBtn: document.getElementById("showKeysBtn"),
+      clearDashboardPrefsBtn: document.getElementById("clearDashboardPrefsBtn"),
+      dataDialog: document.getElementById("dataDialog"),
+      detectedKeysText: document.getElementById("detectedKeysText"),
+      closeDialogBtn: document.getElementById("closeDialogBtn")
+    };
+
+    let lastDetected = { zoning: null, mods: null };
+
+    init();
+
+    function init() {
+      els.todayStamp.textContent = formatLongDate(today);
+      els.refreshBtn.addEventListener("click", renderDashboard);
+      els.showKeysBtn.addEventListener("click", showDetectedDataDialog);
+      els.closeDialogBtn.addEventListener("click", () => els.dataDialog.close());
+      els.clearDashboardPrefsBtn.addEventListener("click", clearDashboardPrefs);
+      window.addEventListener("storage", renderDashboard);
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const zoningRaw = readFirstLocalData(STORAGE_KEY_ALIASES.zoning);
+      const modsRaw = readFirstLocalData(STORAGE_KEY_ALIASES.mods);
+
+      lastDetected = {
+        zoning: zoningRaw,
+        mods: modsRaw
+      };
+
+      const zoning = normalizeZoningData(zoningRaw?.data);
+      const mods = normalizeModData(modsRaw?.data);
+
+      const metrics = buildMetrics(zoning, mods);
+      renderMetrics(metrics, zoningRaw, modsRaw);
+      renderZoningPriorities(zoning);
+      renderModPriorities(mods);
+    }
+
+    function readFirstLocalData(keys) {
+      for (const key of keys) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+
+        try {
+          return { key, data: JSON.parse(raw), raw };
+        } catch (error) {
+          return { key, data: raw, raw, parseError: true };
+        }
+      }
+
+      return null;
+    }
+
+    function normalizeZoningData(data) {
+      const root = unwrapRoot(data);
+      const aisles = firstArray(root, ["aisles", "allAisles", "zones", "zoningAisles", "items"]);
+      const team = firstArray(root, ["team", "todaysTeam", "todayTeam", "associates", "employees"]);
+      const todaysPlan = firstArray(root, ["todaysPlan", "todayPlan", "plan", "zoningPlan", "tasks", "todayTasks"]);
+      const settings = firstObject(root, ["settings", "config", "zoningSettings"]) || {};
+
+      return {
+        aisles: aisles.map(normalizeAisle),
+        team: team.map(normalizeTeamMember),
+        todaysPlan: todaysPlan.map(normalizeZoningTask),
+        settings
+      };
+    }
+
+    function normalizeModData(data) {
+      const root = unwrapRoot(data);
+      const mods = firstArray(root, ["mods", "modulars", "records", "items", "projects", "modList"]);
+      const todaysPlan = firstArray(root, ["todaysPlan", "todayPlan", "scheduledToday", "todayMods"]);
+
+      return {
+        mods: mods.map(normalizeMod),
+        todaysPlan: todaysPlan.map(normalizeModTask)
+      };
+    }
+
+    function unwrapRoot(data) {
+      if (!data) return {};
+      if (Array.isArray(data)) return { items: data };
+      if (typeof data !== "object") return {};
+
+      const likelyRoots = ["state", "data", "appData", "plannerData"];
+      for (const key of likelyRoots) {
+        if (data[key] && typeof data[key] === "object") return data[key];
+      }
+
+      return data;
+    }
+
+    function firstArray(root, keys) {
+      for (const key of keys) {
+        if (Array.isArray(root?.[key])) return root[key];
+      }
+      return [];
+    }
+
+    function firstObject(root, keys) {
+      for (const key of keys) {
+        if (root?.[key] && typeof root[key] === "object" && !Array.isArray(root[key])) return root[key];
+      }
+      return null;
+    }
+
+    function normalizeAisle(item) {
+      return {
+        id: item.id ?? item.aisleId ?? item.key ?? cryptoSafeId(),
+        name: item.name ?? item.aisle ?? item.aisleName ?? item.label ?? "Unnamed aisle",
+        sections: numberFrom(item.sections ?? item.sectionCount ?? item.numSections, 1),
+        priority: numberFrom(item.priority ?? item.zonePriority ?? item.zoningPriority ?? item.effortPriority, 1),
+        lastZoned: item.lastZoned ?? item.lastZonedDate ?? item.zonedAt ?? item.completedAt ?? null,
+        lastZonedBy: item.lastZonedBy ?? item.zonedBy ?? item.associate ?? item.employee ?? "Not recorded"
+      };
+    }
+
+    function normalizeTeamMember(item) {
+      return {
+        id: item.id ?? item.employeeId ?? item.name ?? cryptoSafeId(),
+        name: item.name ?? item.associate ?? item.employee ?? "Associate",
+        startTime: item.startTime ?? item.start ?? item.shiftStart ?? null,
+        endTime: item.endTime ?? item.end ?? item.shiftEnd ?? null,
+        zoningHours: optionalNumber(item.zoningHours ?? item.availableZoningHours ?? item.availableHours)
+      };
+    }
+
+    function normalizeZoningTask(item) {
+      return {
+        id: item.id ?? item.taskId ?? cryptoSafeId(),
+        aisleId: item.aisleId ?? item.zoneId ?? null,
+        aisleName: item.aisleName ?? item.name ?? item.aisle ?? "Zoning task",
+        laborHours: numberFrom(item.laborHours ?? item.hours ?? item.estimatedHours ?? item.labor, 0),
+        assignedTo: item.assignedTo ?? item.associate ?? item.employee ?? "Unassigned",
+        completed: Boolean(item.completed ?? item.isComplete ?? item.done),
+        date: item.date ?? item.planDate ?? item.scheduledDate ?? todayISO
+      };
+    }
+
+    function normalizeMod(item) {
+      const status = String(item.status ?? "").toLowerCase();
+      const completed = Boolean(item.completed ?? item.isComplete ?? item.done) || status.includes("complete");
+
+      return {
+        id: item.id ?? item.modId ?? cryptoSafeId(),
+        department: item.department ?? item.dept ?? item.departmentNumber ?? "Dept",
+        category: item.category ?? item.modularCategory ?? item.name ?? "Modular",
+        categoryDescription: item.categoryDescription ?? item.description ?? item.notes ?? "",
+        sections: numberFrom(item.sections ?? item.sectionCount ?? item.numSections, 0),
+        laborHours: numberFrom(item.laborHours ?? item.hours ?? item.estimatedHours ?? item.labor, 0),
+        plannedSetDate: item.plannedSetDate ?? item.setDate ?? item.scheduledDate ?? item.date ?? "",
+        completed,
+        status,
+        notes: item.notes ?? ""
+      };
+    }
+
+    function normalizeModTask(item) {
+      return {
+        id: item.id ?? item.taskId ?? item.modId ?? cryptoSafeId(),
+        modId: item.modId ?? item.id ?? null,
+        laborHours: numberFrom(item.laborHours ?? item.hours ?? item.estimatedHours ?? item.labor, 0),
+        completed: Boolean(item.completed ?? item.isComplete ?? item.done),
+        date: item.date ?? item.plannedSetDate ?? item.scheduledDate ?? todayISO
+      };
+    }
+
+    function buildMetrics(zoning, mods) {
+      const todaysZoningPlan = zoning.todaysPlan.filter(task => isTodayOrBlank(task.date));
+      const todayModsFromRecords = mods.mods.filter(mod => isSameISODate(mod.plannedSetDate, todayISO));
+      const todayModsFromPlan = mods.todaysPlan.filter(task => isTodayOrBlank(task.date));
+
+      const totalTodayTasks = todaysZoningPlan.length + Math.max(todayModsFromRecords.length, todayModsFromPlan.length);
+      const completedTodayTasks = todaysZoningPlan.filter(t => t.completed).length + todayModsFromRecords.filter(m => m.completed).length;
+      const executionScore = totalTodayTasks ? Math.round((completedTodayTasks / totalTodayTasks) * 100) : 0;
+
+      const availableZoningLabor = calculateAvailableZoningLabor(zoning.team, zoning.settings);
+      const zoningLaborNeeded = sum(todaysZoningPlan.map(t => t.laborHours));
+      const totalMods = mods.mods.length;
+      const completedMods = mods.mods.filter(m => m.completed).length;
+      const modCompletion = totalMods ? Math.round((completedMods / totalMods) * 100) : 0;
+      const unscheduledMods = mods.mods.filter(m => !m.plannedSetDate).length;
+      const overdueMods = mods.mods.filter(m => m.plannedSetDate && compareDateOnly(m.plannedSetDate, todayISO) < 0 && !m.completed).length;
+      const totalModLabor = sum(mods.mods.map(m => m.laborHours));
+      const remainingModLabor = sum(mods.mods.filter(m => !m.completed).map(m => m.laborHours));
+
+      return {
+        todaysZoningPlan,
+        todayModsFromRecords,
+        todayModsFromPlan,
+        totalTodayTasks,
+        completedTodayTasks,
+        executionScore,
+        availableZoningLabor,
+        zoningLaborNeeded,
+        zoningLaborDelta: availableZoningLabor - zoningLaborNeeded,
+        totalMods,
+        completedMods,
+        modCompletion,
+        unscheduledMods,
+        overdueMods,
+        totalModLabor,
+        remainingModLabor
+      };
+    }
+
+    function calculateAvailableZoningLabor(team, settings) {
+      const defaultPerEight = numberFrom(
+        settings.zoningHoursPerEightHourShift ??
+        settings.zoningHoursPer8HourShift ??
+        settings.hoursAvailablePerEightHourShift ??
+        settings.zoningAvailabilityPerShift,
+        1.5
+      );
+
+      return sum(team.map(member => {
+        if (typeof member.zoningHours === "number") return member.zoningHours;
+
+        const shiftHours = calculateShiftHours(member.startTime, member.endTime);
+        if (!shiftHours) return defaultPerEight;
+
+        return (shiftHours / 8) * defaultPerEight;
+      }));
+    }
+
+    function renderMetrics(metrics, zoningRaw, modsRaw) {
+      const detectedCount = [zoningRaw, modsRaw].filter(Boolean).length;
+      els.storageStamp.textContent = detectedCount
+        ? `${detectedCount}/2 tool datasets found`
+        : "No tool data found yet";
+
+      els.executionLabel.textContent = `${metrics.executionScore}%`;
+      els.executionScore.textContent = `${metrics.executionScore}%`;
+      els.executionProgress.style.width = `${clamp(metrics.executionScore, 0, 100)}%`;
+
+      if (metrics.totalTodayTasks) {
+        els.executionNote.textContent = `${metrics.completedTodayTasks} of ${metrics.totalTodayTasks} planned tasks are marked complete for today.`;
+      } else {
+        els.executionNote.textContent = "Add zoning tasks or modular work scheduled for today to begin tracking execution.";
+      }
+
+      els.todayZoningTasks.textContent = String(metrics.todaysZoningPlan.length);
+      els.todayModTasks.textContent = String(Math.max(metrics.todayModsFromRecords.length, metrics.todayModsFromPlan.length));
+      els.availableZoningLabor.textContent = `${formatHours(metrics.availableZoningLabor)}h`;
+      els.availableZoningCaption.textContent = metrics.availableZoningLabor
+        ? `${formatHours(metrics.zoningLaborDelta)}h ${metrics.zoningLaborDelta >= 0 ? "remaining after" : "short against"} today’s zoning plan.`
+        : "Enter today’s team in the zoning planner to calculate availability.";
+
+      els.zoningLaborNeeded.textContent = `${formatHours(metrics.zoningLaborNeeded)}h`;
+      els.zoningLaborCaption.textContent = metrics.todaysZoningPlan.length
+        ? `${metrics.todaysZoningPlan.length} assigned zoning task${metrics.todaysZoningPlan.length === 1 ? "" : "s"} for today.`
+        : "No zoning tasks are assigned for today yet.";
+
+      els.modCompletion.textContent = `${metrics.modCompletion}%`;
+      els.modCompletionCaption.textContent = metrics.totalMods
+        ? `${metrics.completedMods} of ${metrics.totalMods} modulars complete. ${formatHours(metrics.remainingModLabor)}h remaining.`
+        : "No modular records found yet.";
+
+      els.unscheduledMods.textContent = String(metrics.unscheduledMods);
+      els.unscheduledModsCaption.textContent = metrics.overdueMods
+        ? `${metrics.overdueMods} modular${metrics.overdueMods === 1 ? " is" : "s are"} overdue and incomplete.`
+        : "Mods without set dates will appear here.";
+    }
+
+    function renderZoningPriorities(zoning) {
+      els.zoningPriorityList.innerHTML = "";
+
+      const rows = zoning.aisles
+        .map(aisle => ({ ...aisle, score: calculateAislePriorityScore(aisle) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6);
+
+      els.zoningSummary.textContent = zoning.aisles.length
+        ? `${zoning.aisles.length} aisle${zoning.aisles.length === 1 ? "" : "s"}`
+        : "No aisles found";
+
+      if (!rows.length) {
+        els.zoningPriorityList.innerHTML = `<div class="empty">Open the Zoning Planner and add aisles to see priority recommendations here.</div>`;
+        return;
+      }
+
+      rows.forEach(aisle => {
+        const days = daysSince(aisle.lastZoned);
+        const badgeClass = days >= 7 ? "red" : days >= 3 ? "orange" : "green";
+        const badgeText = Number.isFinite(days) ? `${days}d ago` : "Never zoned";
+        els.zoningPriorityList.appendChild(createRow({
+          title: aisle.name,
+          subtitle: `${aisle.sections} section${aisle.sections === 1 ? "" : "s"} • Priority ${formatNumber(aisle.priority)} • Last by ${aisle.lastZonedBy}`,
+          badge: badgeText,
+          badgeClass
+        }));
+      });
+    }
+
+    function renderModPriorities(mods) {
+      els.modsPriorityList.innerHTML = "";
+
+      const rows = mods.mods
+        .filter(mod => !mod.completed)
+        .sort((a, b) => sortModsByUrgency(a, b))
+        .slice(0, 6);
+
+      els.modsSummary.textContent = mods.mods.length
+        ? `${mods.mods.length} modular${mods.mods.length === 1 ? "" : "s"}`
+        : "No modulars found";
+
+      if (!rows.length) {
+        els.modsPriorityList.innerHTML = `<div class="empty">Open the Modular Planner and add modulars to see upcoming and overdue work here.</div>`;
+        return;
+      }
+
+      rows.forEach(mod => {
+        const dateLabel = mod.plannedSetDate ? formatShortDate(mod.plannedSetDate) : "Unscheduled";
+        const cmp = mod.plannedSetDate ? compareDateOnly(mod.plannedSetDate, todayISO) : 1;
+        const badgeClass = !mod.plannedSetDate ? "orange" : cmp < 0 ? "red" : cmp === 0 ? "green" : "";
+
+        els.modsPriorityList.appendChild(createRow({
+          title: `${mod.department} • ${mod.category}`,
+          subtitle: `${mod.sections} section${mod.sections === 1 ? "" : "s"} • ${formatHours(mod.laborHours)} labor hour${mod.laborHours === 1 ? "" : "s"}`,
+          badge: dateLabel,
+          badgeClass
+        }));
+      });
+    }
+
+    function createRow({ title, subtitle, badge, badgeClass = "" }) {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <div class="row-main">
+          <strong></strong>
+          <span></span>
+        </div>
+        <div class="badge ${badgeClass}"></div>
+      `;
+      row.querySelector("strong").textContent = title;
+      row.querySelector("span").textContent = subtitle;
+      row.querySelector(".badge").textContent = badge;
+      return row;
+    }
+
+    function showDetectedDataDialog() {
+      const lines = [];
+      lines.push(`Today: ${todayISO}`);
+      lines.push("");
+      lines.push(`Zoning key: ${lastDetected.zoning?.key || "Not found"}`);
+      lines.push(`Modular key: ${lastDetected.mods?.key || "Not found"}`);
+      lines.push("");
+      lines.push("All localStorage keys on this device for this page origin:");
+
+      if (localStorage.length === 0) {
+        lines.push("- None");
+      } else {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const size = (localStorage.getItem(key) || "").length;
+          lines.push(`- ${key} (${size.toLocaleString()} chars)`);
+        }
+      }
+
+      els.detectedKeysText.textContent = lines.join("\n");
+      els.dataDialog.showModal();
+    }
+
+    function clearDashboardPrefs() {
+      localStorage.removeItem(STORAGE_KEY_ALIASES.dashboardPrefs);
+      alert("Dashboard preferences cleared. Tool data was not touched.");
+      renderDashboard();
+    }
+
+    function calculateAislePriorityScore(aisle) {
+      const days = daysSince(aisle.lastZoned);
+      const staleness = Number.isFinite(days) ? Math.min(days, 30) : 30;
+      return (aisle.priority * 10) + (aisle.sections * 1.5) + staleness;
+    }
+
+    function sortModsByUrgency(a, b) {
+      const aDate = a.plannedSetDate || "9999-12-31";
+      const bDate = b.plannedSetDate || "9999-12-31";
+      const dateCompare = compareDateOnly(aDate, bDate);
+      if (dateCompare !== 0) return dateCompare;
+      return b.laborHours - a.laborHours;
+    }
+
+    function isTodayOrBlank(value) {
+      if (!value) return true;
+      return isSameISODate(value, todayISO);
+    }
+
+    function isSameISODate(a, b) {
+      if (!a || !b) return false;
+      return toISODate(new Date(a)) === toISODate(new Date(b));
+    }
+
+    function compareDateOnly(a, b) {
+      const aa = toISODate(new Date(a));
+      const bb = toISODate(new Date(b));
+      if (aa < bb) return -1;
+      if (aa > bb) return 1;
+      return 0;
+    }
+
+    function daysSince(value) {
+      if (!value) return Infinity;
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return Infinity;
+      const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      return Math.max(0, Math.floor((startToday - startDate) / 86400000));
+    }
+
+    function calculateShiftHours(startTime, endTime) {
+      if (!startTime || !endTime) return 0;
+      const start = parseTimeToMinutes(startTime);
+      const end = parseTimeToMinutes(endTime);
+      if (start === null || end === null) return 0;
+      let diff = end - start;
+      if (diff < 0) diff += 24 * 60;
+      return diff / 60;
+    }
+
+    function parseTimeToMinutes(value) {
+      if (typeof value !== "string") return null;
+      const cleaned = value.trim().toLowerCase();
+      const ampmMatch = cleaned.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
+      if (ampmMatch) {
+        let hours = Number(ampmMatch[1]);
+        const minutes = Number(ampmMatch[2] || 0);
+        const ampm = ampmMatch[3];
+        if (ampm === "pm" && hours !== 12) hours += 12;
+        if (ampm === "am" && hours === 12) hours = 0;
+        return hours * 60 + minutes;
+      }
+
+      const timeMatch = cleaned.match(/^(\d{1,2}):(\d{2})$/);
+      if (!timeMatch) return null;
+      return Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
+    }
+
+    function numberFrom(value, fallback) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function optionalNumber(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : undefined;
+    }
+
+    function sum(values) {
+      return values.reduce((total, value) => total + numberFrom(value, 0), 0);
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function formatHours(value) {
+      const rounded = Math.round(numberFrom(value, 0) * 10) / 10;
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+    }
+
+    function formatNumber(value) {
+      const n = numberFrom(value, 0);
+      return Number.isInteger(n) ? String(n) : n.toFixed(1);
+    }
+
+    function formatLongDate(date) {
+      return new Intl.DateTimeFormat(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function formatShortDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function toISODate(date) {
+      if (!(date instanceof Date) || Number.isNaN(date.getTime())) return "";
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function cryptoSafeId() {
+      if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+      return `id_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    }
+  </script>
+</body>
+</html>
