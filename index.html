@@ -210,7 +210,7 @@
 
     .tool-links {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
       position: relative;
       z-index: 1;
@@ -352,6 +352,63 @@
     .metric-card {
       padding: 20px;
       min-height: 148px;
+    }
+
+    .alert-pop {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      max-width: min(420px, calc(100% - 36px));
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(220, 38, 38, 0.22);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .alert-pop.show { display: flex; }
+
+    .alert-pop-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: white;
+      font-weight: 950;
+      background: linear-gradient(135deg, var(--red), #f97316);
+      box-shadow: 0 12px 30px rgba(220, 38, 38, 0.24);
+    }
+
+    .alert-pop strong { display: block; margin-bottom: 2px; }
+
+    .alert-pop span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .alert-pop a {
+      font-weight: 850;
+      color: var(--blue-dark);
+    }
+
+    .alert-close {
+      border: none;
+      background: rgba(100,116,139,0.12);
+      color: var(--muted);
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      font-weight: 900;
+      margin-left: auto;
     }
 
     .metric-card .label {
@@ -625,7 +682,7 @@
         <div class="eyebrow">Store planning command center</div>
         <h2>One hub for today’s workload.</h2>
         <p class="subtext">
-          This page reads the saved data from your zoning and modular planning tools directly from this device.
+          This page reads the saved data from your zoning, modular planning, and coverage planning tools directly from this device.
           No server, account, database, or cloud sync is used.
         </p>
 
@@ -642,6 +699,14 @@
             <div>
               <strong>Modular Planner</strong>
               <span>Track modulars, scheduled set dates, labor hours, and completion.</span>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+
+          <a class="tool-link" href="coverage.html">
+            <div>
+              <strong>Coverage Planner</strong>
+              <span>Plan schedules, breaks, lunches, coverage gaps, and meal compliance.</span>
             </div>
             <div class="arrow">→</div>
           </a>
@@ -697,6 +762,30 @@
         <div class="value" id="unscheduledMods">0</div>
         <p class="caption" id="unscheduledModsCaption">Mods without a planned set date.</p>
       </article>
+
+      <article class="card metric-card accent-blue">
+        <div class="label">Scheduled associates</div>
+        <div class="value" id="scheduledAssociates">0</div>
+        <p class="caption" id="scheduledAssociatesCaption">Associates loaded in today’s coverage planner.</p>
+      </article>
+
+      <article class="card metric-card accent-yellow">
+        <div class="label">Coverage hours</div>
+        <div class="value" id="coverageHours">0h</div>
+        <p class="caption" id="coverageHoursCaption">Net scheduled coverage after meals and breaks.</p>
+      </article>
+
+      <article class="card metric-card accent-green">
+        <div class="label">Coverage needs</div>
+        <div class="value" id="coverageNeeds">0</div>
+        <p class="caption" id="coverageNeedsCaption">Miscellaneous floor, audit, register, or service needs.</p>
+      </article>
+
+      <article class="card metric-card accent-orange">
+        <div class="label">Coverage alerts</div>
+        <div class="value" id="coverageAlerts">0</div>
+        <p class="caption" id="coverageAlertsCaption">Policy conflicts and coverage gaps from the coverage planner.</p>
+      </article>
     </section>
 
     <section class="two-col">
@@ -717,12 +806,30 @@
       </article>
     </section>
 
+    <section class="two-col">
+      <article class="card panel">
+        <div class="section-title">
+          <h3>Coverage alerts</h3>
+          <small id="coverageSummary">No coverage data found</small>
+        </div>
+        <div class="list" id="coverageAlertList"></div>
+      </article>
+
+      <article class="card panel">
+        <div class="section-title">
+          <h3>Schedule coverage</h3>
+          <small id="scheduleSummary">No schedule found</small>
+        </div>
+        <div class="list" id="scheduleCoverageList"></div>
+      </article>
+    </section>
+
     <section class="card storage-panel">
       <div>
         <h3>Local-device data policy</h3>
         <p>
           This dashboard only reads and writes browser localStorage on this device. Keep the dashboard, zoning tool,
-          and modular tool in the same folder so all three pages can reference the same local saved data.
+          modular tool, and coverage planner in the same folder so all pages can reference the same local saved data.
         </p>
       </div>
       <div class="storage-actions">
@@ -731,6 +838,16 @@
       </div>
     </section>
   </main>
+
+  <div class="alert-pop" id="coverageAlertPop" role="status" aria-live="polite">
+    <div class="alert-pop-icon" id="coverageAlertPopCount">0</div>
+    <div>
+      <strong id="coverageAlertPopTitle">Coverage alerts</strong>
+      <span id="coverageAlertPopText">Review the coverage planner for details.</span>
+    </div>
+    <a href="coverage.html">Open</a>
+    <button class="alert-close" type="button" id="coverageAlertPopClose" aria-label="Dismiss coverage alert popup">×</button>
+  </div>
 
   <dialog id="dataDialog">
     <div class="modal-inner">
@@ -769,6 +886,9 @@
      *   Modular planner recommended key:
      *     walmart_modular_data
      *
+     *   Coverage planner recommended key:
+     *     walmart_coverage_data
+     *
      *   Suggested zoning shape:
      *     {
      *       aisles: [{ id, name, sections, priority, lastZoned, lastZonedBy }],
@@ -804,6 +924,15 @@
         "walmartModularPlanner",
         "modPlannerData"
       ],
+      coverage: [
+        "walmart_coverage_data",
+        "coverage_data",
+        "coveragePlannerData",
+        "coveragePlanner",
+        "scheduleCoverageData",
+        "wm_coverage_data",
+        "walmartCoveragePlanner"
+      ],
       dashboardPrefs: "walmart_planning_dashboard_prefs"
     };
 
@@ -836,10 +965,27 @@
       clearDashboardPrefsBtn: document.getElementById("clearDashboardPrefsBtn"),
       dataDialog: document.getElementById("dataDialog"),
       detectedKeysText: document.getElementById("detectedKeysText"),
-      closeDialogBtn: document.getElementById("closeDialogBtn")
+      closeDialogBtn: document.getElementById("closeDialogBtn"),
+      scheduledAssociates: document.getElementById("scheduledAssociates"),
+      scheduledAssociatesCaption: document.getElementById("scheduledAssociatesCaption"),
+      coverageHours: document.getElementById("coverageHours"),
+      coverageHoursCaption: document.getElementById("coverageHoursCaption"),
+      coverageNeeds: document.getElementById("coverageNeeds"),
+      coverageNeedsCaption: document.getElementById("coverageNeedsCaption"),
+      coverageAlerts: document.getElementById("coverageAlerts"),
+      coverageAlertsCaption: document.getElementById("coverageAlertsCaption"),
+      coverageAlertList: document.getElementById("coverageAlertList"),
+      coverageSummary: document.getElementById("coverageSummary"),
+      scheduleCoverageList: document.getElementById("scheduleCoverageList"),
+      scheduleSummary: document.getElementById("scheduleSummary"),
+      coverageAlertPop: document.getElementById("coverageAlertPop"),
+      coverageAlertPopCount: document.getElementById("coverageAlertPopCount"),
+      coverageAlertPopTitle: document.getElementById("coverageAlertPopTitle"),
+      coverageAlertPopText: document.getElementById("coverageAlertPopText"),
+      coverageAlertPopClose: document.getElementById("coverageAlertPopClose")
     };
 
-    let lastDetected = { zoning: null, mods: null };
+    let lastDetected = { zoning: null, mods: null, coverage: null };
 
     init();
 
@@ -848,6 +994,7 @@
       els.refreshBtn.addEventListener("click", renderDashboard);
       els.showKeysBtn.addEventListener("click", showDetectedDataDialog);
       els.closeDialogBtn.addEventListener("click", () => els.dataDialog.close());
+      els.coverageAlertPopClose.addEventListener("click", dismissCoverageAlertPopup);
       els.clearDashboardPrefsBtn.addEventListener("click", clearDashboardPrefs);
       window.addEventListener("storage", renderDashboard);
       renderDashboard();
@@ -856,19 +1003,24 @@
     function renderDashboard() {
       const zoningRaw = readFirstLocalData(STORAGE_KEY_ALIASES.zoning);
       const modsRaw = readFirstLocalData(STORAGE_KEY_ALIASES.mods);
+      const coverageRaw = readFirstLocalData(STORAGE_KEY_ALIASES.coverage);
 
       lastDetected = {
         zoning: zoningRaw,
-        mods: modsRaw
+        mods: modsRaw,
+        coverage: coverageRaw
       };
 
       const zoning = normalizeZoningData(zoningRaw?.data);
       const mods = normalizeModData(modsRaw?.data);
+      const coverage = normalizeCoverageData(coverageRaw?.data);
 
-      const metrics = buildMetrics(zoning, mods);
-      renderMetrics(metrics, zoningRaw, modsRaw);
+      const metrics = buildMetrics(zoning, mods, coverage);
+      renderMetrics(metrics, zoningRaw, modsRaw, coverageRaw);
       renderZoningPriorities(zoning);
       renderModPriorities(mods);
+      renderCoverageAlerts(coverage);
+      renderScheduleCoverage(coverage);
     }
 
     function readFirstLocalData(keys) {
@@ -909,6 +1061,23 @@
       return {
         mods: mods.map(normalizeMod),
         todaysPlan: todaysPlan.map(normalizeModTask)
+      };
+    }
+
+    function normalizeCoverageData(data) {
+      const root = unwrapRoot(data);
+      const associates = firstArray(root, ["associates", "team", "employees", "schedule", "shifts", "todaySchedule"]);
+      const alerts = firstArray(root, ["alerts", "coverageAlerts", "policyAlerts", "conflicts", "gaps"]);
+      const coverageNeeds = firstArray(root, ["coverageNeeds", "miscCoverageNeeds", "needs", "tasks", "floorNeeds"]);
+      const breaks = firstArray(root, ["breaks", "breakPlan", "mealBreaks", "plannedBreaks"]);
+      const settings = firstObject(root, ["settings", "config", "coverageSettings"]) || {};
+
+      return {
+        associates: associates.map(normalizeCoverageAssociate),
+        alerts: alerts.map(normalizeCoverageAlert),
+        coverageNeeds: coverageNeeds.map(normalizeCoverageNeed),
+        breaks: breaks.map(normalizeCoverageBreak),
+        settings
       };
     }
 
@@ -1000,7 +1169,59 @@
       };
     }
 
-    function buildMetrics(zoning, mods) {
+    function normalizeCoverageAssociate(item) {
+      return {
+        id: item.id ?? item.employeeId ?? item.name ?? cryptoSafeId(),
+        name: item.name ?? item.associate ?? item.employee ?? "Associate",
+        team: item.team ?? item.department ?? item.area ?? "Team",
+        startTime: item.startTime ?? item.start ?? item.shiftStart ?? null,
+        endTime: item.endTime ?? item.end ?? item.shiftEnd ?? null,
+        mealTime: item.mealTime ?? item.lunchTime ?? item.mealStart ?? null,
+        breakCount: numberFrom(item.breakCount ?? item.breaks ?? item.fifteens ?? item.fifteenCount, 0),
+        netCoverageHours: optionalNumber(item.netCoverageHours ?? item.coverageHours ?? item.availableCoverageHours),
+        date: item.date ?? item.scheduleDate ?? item.shiftDate ?? todayISO
+      };
+    }
+
+    function normalizeCoverageAlert(item) {
+      if (typeof item === "string") {
+        return { id: cryptoSafeId(), type: "Alert", message: item, severity: "alert", date: todayISO };
+      }
+
+      return {
+        id: item.id ?? item.alertId ?? cryptoSafeId(),
+        type: item.type ?? item.category ?? item.alertType ?? "Alert",
+        message: item.message ?? item.description ?? item.title ?? "Coverage alert",
+        severity: String(item.severity ?? item.level ?? item.priority ?? "alert").toLowerCase(),
+        associate: item.associate ?? item.employee ?? item.name ?? "",
+        date: item.date ?? item.alertDate ?? item.scheduleDate ?? todayISO
+      };
+    }
+
+    function normalizeCoverageNeed(item) {
+      return {
+        id: item.id ?? item.needId ?? cryptoSafeId(),
+        title: item.title ?? item.name ?? item.description ?? "Coverage need",
+        startTime: item.startTime ?? item.start ?? null,
+        endTime: item.endTime ?? item.end ?? null,
+        durationMinutes: numberFrom(item.durationMinutes ?? item.minutes ?? item.duration, 0),
+        coveredBy: item.coveredBy ?? item.assignedTo ?? item.associate ?? "Unassigned",
+        date: item.date ?? item.needDate ?? item.scheduleDate ?? todayISO
+      };
+    }
+
+    function normalizeCoverageBreak(item) {
+      return {
+        id: item.id ?? item.breakId ?? cryptoSafeId(),
+        associate: item.associate ?? item.employee ?? item.name ?? "Associate",
+        type: item.type ?? item.breakType ?? "Break",
+        startTime: item.startTime ?? item.start ?? item.time ?? null,
+        endTime: item.endTime ?? item.end ?? null,
+        date: item.date ?? item.breakDate ?? item.scheduleDate ?? todayISO
+      };
+    }
+
+    function buildMetrics(zoning, mods, coverage) {
       const todaysZoningPlan = zoning.todaysPlan.filter(task => isTodayOrBlank(task.date));
       const todayModsFromRecords = mods.mods.filter(mod => isSameISODate(mod.plannedSetDate, todayISO));
       const todayModsFromPlan = mods.todaysPlan.filter(task => isTodayOrBlank(task.date));
@@ -1018,6 +1239,14 @@
       const overdueMods = mods.mods.filter(m => m.plannedSetDate && compareDateOnly(m.plannedSetDate, todayISO) < 0 && !m.completed).length;
       const totalModLabor = sum(mods.mods.map(m => m.laborHours));
       const remainingModLabor = sum(mods.mods.filter(m => !m.completed).map(m => m.laborHours));
+      const todayAssociates = coverage.associates.filter(a => isTodayOrBlank(a.date));
+      const todayCoverageAlerts = coverage.alerts.filter(a => isTodayOrBlank(a.date));
+      const todayCoverageNeeds = coverage.coverageNeeds.filter(n => isTodayOrBlank(n.date));
+      const netCoverageHours = sum(todayAssociates.map(a => {
+        if (typeof a.netCoverageHours === "number") return a.netCoverageHours;
+        return calculateNetCoverageHours(a.startTime, a.endTime, a.breakCount);
+      }));
+      const uncoveredNeeds = todayCoverageNeeds.filter(n => !n.coveredBy || n.coveredBy === "Unassigned").length;
 
       return {
         todaysZoningPlan,
@@ -1035,7 +1264,12 @@
         unscheduledMods,
         overdueMods,
         totalModLabor,
-        remainingModLabor
+        remainingModLabor,
+        todayAssociates,
+        todayCoverageAlerts,
+        todayCoverageNeeds,
+        netCoverageHours,
+        uncoveredNeeds
       };
     }
 
@@ -1058,10 +1292,10 @@
       }));
     }
 
-    function renderMetrics(metrics, zoningRaw, modsRaw) {
-      const detectedCount = [zoningRaw, modsRaw].filter(Boolean).length;
+    function renderMetrics(metrics, zoningRaw, modsRaw, coverageRaw) {
+      const detectedCount = [zoningRaw, modsRaw, coverageRaw].filter(Boolean).length;
       els.storageStamp.textContent = detectedCount
-        ? `${detectedCount}/2 tool datasets found`
+        ? `${detectedCount}/3 tool datasets found`
         : "No tool data found yet";
 
       els.executionLabel.textContent = `${metrics.executionScore}%`;
@@ -1095,6 +1329,28 @@
       els.unscheduledModsCaption.textContent = metrics.overdueMods
         ? `${metrics.overdueMods} modular${metrics.overdueMods === 1 ? " is" : "s are"} overdue and incomplete.`
         : "Mods without set dates will appear here.";
+
+      els.scheduledAssociates.textContent = String(metrics.todayAssociates.length);
+      els.scheduledAssociatesCaption.textContent = metrics.todayAssociates.length
+        ? `${metrics.todayAssociates.length} associate${metrics.todayAssociates.length === 1 ? " is" : "s are"} scheduled in coverage planning today.`
+        : "No associates are loaded in the coverage planner yet.";
+
+      els.coverageHours.textContent = `${formatHours(metrics.netCoverageHours)}h`;
+      els.coverageHoursCaption.textContent = metrics.netCoverageHours
+        ? "Calculated from shifts minus estimated meals and 15-minute breaks."
+        : "Add today’s schedule to the coverage planner to calculate coverage.";
+
+      els.coverageNeeds.textContent = String(metrics.todayCoverageNeeds.length);
+      els.coverageNeedsCaption.textContent = metrics.uncoveredNeeds
+        ? `${metrics.uncoveredNeeds} coverage need${metrics.uncoveredNeeds === 1 ? " is" : "s are"} still unassigned.`
+        : "Miscellaneous coverage needs from the coverage planner.";
+
+      els.coverageAlerts.textContent = String(metrics.todayCoverageAlerts.length);
+      els.coverageAlertsCaption.textContent = metrics.todayCoverageAlerts.length
+        ? `${metrics.todayCoverageAlerts.length} alert${metrics.todayCoverageAlerts.length === 1 ? " needs" : "s need"} review in the coverage planner.`
+        : "No active coverage alerts found for today.";
+
+      renderCoverageAlertPopup(metrics.todayCoverageAlerts.length);
     }
 
     function renderZoningPriorities(zoning) {
@@ -1158,6 +1414,79 @@
       });
     }
 
+    function renderCoverageAlerts(coverage) {
+      els.coverageAlertList.innerHTML = "";
+      const rows = coverage.alerts
+        .filter(alert => isTodayOrBlank(alert.date))
+        .slice(0, 6);
+
+      els.coverageSummary.textContent = rows.length
+        ? `${rows.length} active today`
+        : "No coverage alerts";
+
+      if (!rows.length) {
+        els.coverageAlertList.innerHTML = `<div class="empty">No coverage alerts found. Policy conflicts and coverage gaps from coverage.html will show here.</div>`;
+        return;
+      }
+
+      rows.forEach(alert => {
+        const severity = alert.severity.includes("critical") || alert.severity.includes("high") ? "red" : "orange";
+        els.coverageAlertList.appendChild(createRow({
+          title: alert.type,
+          subtitle: `${alert.associate ? alert.associate + " • " : ""}${alert.message}`,
+          badge: alert.severity || "alert",
+          badgeClass: severity
+        }));
+      });
+    }
+
+    function renderScheduleCoverage(coverage) {
+      els.scheduleCoverageList.innerHTML = "";
+      const rows = coverage.associates
+        .filter(associate => isTodayOrBlank(associate.date))
+        .sort((a, b) => (parseTimeToMinutes(a.startTime || "99:99") || 9999) - (parseTimeToMinutes(b.startTime || "99:99") || 9999))
+        .slice(0, 6);
+
+      els.scheduleSummary.textContent = rows.length
+        ? `${rows.length} shown today`
+        : "No schedule found";
+
+      if (!rows.length) {
+        els.scheduleCoverageList.innerHTML = `<div class="empty">Open the Coverage Planner and enter today’s schedule to see associates and net coverage here.</div>`;
+        return;
+      }
+
+      rows.forEach(associate => {
+        const shiftLabel = associate.startTime && associate.endTime ? `${associate.startTime}–${associate.endTime}` : "No shift time";
+        const netHours = typeof associate.netCoverageHours === "number"
+          ? associate.netCoverageHours
+          : calculateNetCoverageHours(associate.startTime, associate.endTime, associate.breakCount);
+
+        els.scheduleCoverageList.appendChild(createRow({
+          title: associate.name,
+          subtitle: `${associate.team} • ${shiftLabel}`,
+          badge: `${formatHours(netHours)}h net`,
+          badgeClass: netHours >= 7 ? "green" : netHours >= 4 ? "orange" : ""
+        }));
+      });
+    }
+
+    function renderCoverageAlertPopup(alertCount) {
+      const pop = els.coverageAlertPop;
+      if (!pop) return;
+
+      const dismissedDate = localStorage.getItem(`${STORAGE_KEY_ALIASES.dashboardPrefs}_coverage_alert_dismissed_${todayISO}`);
+      if (!alertCount || dismissedDate === String(alertCount)) {
+        pop.classList.remove("show");
+        return;
+      }
+
+      els.coverageAlertPopCount.textContent = String(alertCount);
+      els.coverageAlertPopTitle.textContent = `${alertCount} coverage alert${alertCount === 1 ? "" : "s"}`;
+      els.coverageAlertPopText.textContent = "Review coverage gaps, meal timing conflicts, or break planning issues.";
+      pop.classList.add("show");
+    }
+
     function createRow({ title, subtitle, badge, badgeClass = "" }) {
       const row = document.createElement("div");
       row.className = "row";
@@ -1180,6 +1509,7 @@
       lines.push("");
       lines.push(`Zoning key: ${lastDetected.zoning?.key || "Not found"}`);
       lines.push(`Modular key: ${lastDetected.mods?.key || "Not found"}`);
+      lines.push(`Coverage key: ${lastDetected.coverage?.key || "Not found"}`);
       lines.push("");
       lines.push("All localStorage keys on this device for this page origin:");
 
@@ -1199,8 +1529,15 @@
 
     function clearDashboardPrefs() {
       localStorage.removeItem(STORAGE_KEY_ALIASES.dashboardPrefs);
+      localStorage.removeItem(`${STORAGE_KEY_ALIASES.dashboardPrefs}_coverage_alert_dismissed_${todayISO}`);
       alert("Dashboard preferences cleared. Tool data was not touched.");
       renderDashboard();
+    }
+
+    function dismissCoverageAlertPopup() {
+      const count = els.coverageAlertPopCount.textContent || "0";
+      localStorage.setItem(`${STORAGE_KEY_ALIASES.dashboardPrefs}_coverage_alert_dismissed_${todayISO}`, count);
+      els.coverageAlertPop.classList.remove("show");
     }
 
     function calculateAislePriorityScore(aisle) {
@@ -1242,6 +1579,15 @@
       const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       return Math.max(0, Math.floor((startToday - startDate) / 86400000));
+    }
+
+    function calculateNetCoverageHours(startTime, endTime, breakCount = 0) {
+      const shiftHours = calculateShiftHours(startTime, endTime);
+      if (!shiftHours) return 0;
+
+      const mealHours = shiftHours > 6 ? 1 : 0;
+      const fifteenCount = breakCount || (shiftHours >= 6 ? 2 : shiftHours >= 4 ? 1 : 0);
+      return Math.max(0, shiftHours - mealHours - (fifteenCount * 0.25));
     }
 
     function calculateShiftHours(startTime, endTime) {
