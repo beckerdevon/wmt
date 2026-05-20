@@ -80,6 +80,21 @@
       cursor: pointer;
     }
 
+    .privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0 14px;
+      padding: 10px 13px;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: .86rem;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(22, 101, 52, .08);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -396,30 +411,21 @@
       </div>
     </header>
 
+    <div class="privacy-badge">🔒 Local only: all data remains confidential and is stored only on this device and browser.</div>
+
     <section class="metrics" id="metrics"></section>
 
     <main class="grid">
       <section class="card">
-        <h2>Today’s Team</h2>
-        <div class="form-row">
+        <div class="row-top">
           <div>
-            <label>Associate name</label>
-            <input id="teamName" placeholder="Example: Alex" />
+            <h2>Today’s Team</h2>
+            <div class="small">Pulled from the Coverage Planner for the selected day.</div>
           </div>
+          <button class="soft" onclick="openCoveragePlanner()">Open Coverage</button>
         </div>
-        <div class="form-row two">
-          <div>
-            <label>Shift start</label>
-            <input id="teamStart" type="time" value="14:00" />
-          </div>
-          <div>
-            <label>Shift end</label>
-            <input id="teamEnd" type="time" value="23:00" />
-          </div>
-        </div>
-        <button class="primary full" onclick="addAssociate()">Add associate</button>
 
-        <div class="section-label">Working today</div>
+        <div class="section-label">Available for zoning</div>
         <div class="list" id="teamList"></div>
       </section>
 
@@ -518,6 +524,75 @@
 
     let newAislePriority = 3;
     let state = migrateAndLoad();
+
+    function getCoveragePlannerState() {
+      const possibleKeys = [
+        "coveragePlanner.v1",
+        "coveragePlannerApp.v1",
+        "coveragePlanningApp.v1",
+        "walmartCoveragePlanner.v1",
+        "coveragePlannerData",
+        "coverageData"
+      ];
+
+      for (const key of possibleKeys) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          const parsed = JSON.parse(raw);
+          const team = extractCoverageTeam(parsed);
+          if (team.length) return { key, parsed, team };
+        } catch {}
+      }
+
+      return { key: null, parsed: null, team: [] };
+    }
+
+    function extractCoverageTeam(data) {
+      const today = todayKey();
+      const candidates = [];
+
+      if (Array.isArray(data?.associates)) candidates.push(data.associates);
+      if (Array.isArray(data?.team)) candidates.push(data.team);
+      if (Array.isArray(data?.schedule)) candidates.push(data.schedule);
+      if (Array.isArray(data?.shifts)) candidates.push(data.shifts);
+      if (Array.isArray(data?.days?.[today]?.associates)) candidates.push(data.days[today].associates);
+      if (Array.isArray(data?.days?.[today]?.team)) candidates.push(data.days[today].team);
+      if (Array.isArray(data?.dailyPlans?.[today]?.associates)) candidates.push(data.dailyPlans[today].associates);
+      if (Array.isArray(data?.dailyPlans?.[today]?.team)) candidates.push(data.dailyPlans[today].team);
+
+      const flat = candidates.flat();
+      const normalized = flat.map((person, index) => {
+        const name = person.name || person.associateName || person.employeeName || person.fullName || person.firstName || `Associate ${index + 1}`;
+        const start = person.start || person.startTime || person.shiftStart || person.in || person.clockIn;
+        const end = person.end || person.endTime || person.shiftEnd || person.out || person.clockOut;
+        const date = person.date || person.day || today;
+
+        if (!start || !end) return null;
+        if (date && date !== today && String(date).slice(0, 10) !== today) return null;
+
+        return {
+          id: person.id || person.associateId || person.employeeId || `coverage-${index}-${name}`,
+          name,
+          start,
+          end,
+          source: "coverage"
+        };
+      }).filter(Boolean);
+
+      const seen = new Set();
+      return normalized.filter(person => {
+        const key = `${person.name}-${person.start}-${person.end}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function getTodayTeam() {
+      const coverage = getCoveragePlannerState();
+      return coverage.team;
+    }
 
     function migrateAndLoad() {
       let raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY);
@@ -830,13 +905,13 @@
       const aisle = state.aisles.find(a => a.id === aisleId);
       if (!aisle) return null;
       const needed = aisleLaborHours(aisle);
-      const usage = Object.fromEntries(state.team.map(a => [a.id, 0]));
+      const usage = Object.fromEntries(getTodayTeam().map(a => [a.id, 0]));
       for (const p of workingPlan) {
         const pa = state.aisles.find(a => a.id === p.aisleId);
         if (pa && usage[p.associateId] !== undefined) usage[p.associateId] += aisleLaborHours(pa);
       }
 
-      return [...state.team]
+      return [...getTodayTeam()]
         .map(a => ({ ...a, remaining: associateZoneHours(a) - (usage[a.id] || 0) }))
         .filter(a => a.remaining >= needed)
         .sort((a, b) => b.remaining - a.remaining)[0] || null;
@@ -924,7 +999,7 @@
         const aisle = state.aisles.find(a => a.id === p.aisleId);
         return sum + (aisle ? aisleLaborHours(aisle) : 0);
       }, 0);
-      const available = state.team.reduce((sum, a) => sum + associateZoneHours(a), 0);
+      const available = getTodayTeam().reduce((sum, a) => sum + associateZoneHours(a), 0);
       const completed = state.plan.filter(p => p.completed).length;
       return { needed, available, completed };
     }
@@ -938,7 +1013,7 @@
         .sort((a, b) => aisleScore(b) - aisleScore(a))[0];
 
       metrics.innerHTML = `
-        <div class="metric"><div class="label">Available zone labor</div><div class="value">${available.toFixed(1)}h</div><div class="small">Inside ${state.settings.zoningStart}–${state.settings.zoningEnd}, after estimated meals/breaks</div></div>
+        <div class="metric"><div class="label">Available zone labor</div><div class="value">${available.toFixed(1)}h</div><div class="small">From Coverage Planner shifts inside ${state.settings.zoningStart}–${state.settings.zoningEnd}, after estimated meals/breaks</div></div>
         <div class="metric"><div class="label">Planned labor</div><div class="value">${needed.toFixed(1)}h</div></div>
         <div class="metric"><div class="label">Labor status</div><div class="value">${remaining > 0 ? remaining.toFixed(1) + "h short" : "Covered"}</div></div>
         <div class="metric"><div class="label">Completion</div><div class="value">${pct}%</div><div class="progress"><div class="bar" style="width:${pct}%"></div></div></div>
@@ -949,8 +1024,17 @@
     }
 
     function renderTeam() {
-      teamList.innerHTML = state.team.length ? "" : `<div class="empty">No associates added yet.</div>`;
-      for (const a of state.team) {
+      const coverage = getCoveragePlannerState();
+      const team = coverage.team;
+
+      teamList.innerHTML = team.length ? "" : `
+        <div class="empty">
+          No coverage planner team data found for today.<br><br>
+          Add today's associates in <strong>coverage.html</strong>, then return here.
+        </div>
+      `;
+
+      for (const a of team) {
         teamList.innerHTML += `
           <div class="row-card">
             <div class="row-top">
@@ -958,11 +1042,19 @@
                 <div class="title">${a.name}</div>
                 <div class="meta">${a.start}–${a.end} • ${associateZoneHours(a).toFixed(1)} zone hours available<br>${associateBreakSummary(a)}</div>
               </div>
-              <button class="danger" onclick="removeAssociate('${a.id}')">Remove</button>
+              <span class="pill good">Coverage Planner</span>
             </div>
           </div>
         `;
       }
+
+      if (coverage.key && team.length) {
+        teamList.innerHTML += `<div class="small">Source: ${coverage.key}</div>`;
+      }
+    }
+
+    function openCoveragePlanner() {
+      window.location.href = "coverage.html";
     }
 
     function renderPlan() {
