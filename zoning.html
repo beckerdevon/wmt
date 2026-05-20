@@ -389,7 +389,11 @@
         <h1>Zone Planning</h1>
         <div class="subtitle">Plan today’s zoning by labor, aisle priority, last zoned date, and observed manual-add patterns.</div>
       </div>
-      <button class="gear" onclick="openConfig()" aria-label="Open configuration">⚙️</button>
+      <div class="actions">
+        <button class="soft" onclick="returnHome()">Home</button>
+        <button class="soft" onclick="exportSavedData()">Export Data</button>
+        <button class="gear" onclick="openConfig()" aria-label="Open configuration">⚙️</button>
+      </div>
     </header>
 
     <section class="metrics" id="metrics"></section>
@@ -639,7 +643,11 @@
     function aisleLaborHours(aisle) {
       const sections = Number(aisle.sections || 1);
       const priority = effectivePriority(aisle);
-      const minutesPerSection = 4 + (priority * 2.25);
+
+      // Priority 1 = 2.5 min/section, Priority 5 = 10 min/section.
+      // Formula steps evenly by 1.875 minutes per priority level.
+      const minutesPerSection = 2.5 + ((priority - 1) * 1.875);
+
       return Math.round((sections * minutesPerSection / 60) * 100) / 100;
     }
 
@@ -1045,6 +1053,23 @@
           </div>
         `;
       }
+    }
+
+    function exportSavedData() {
+      const data = JSON.stringify(state, null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `zoning-data-${todayKey()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function returnHome() {
+      window.location.href = "index.html";
     }
 
     function render() {
